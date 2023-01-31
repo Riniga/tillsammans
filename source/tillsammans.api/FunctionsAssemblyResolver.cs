@@ -23,9 +23,7 @@ namespace tillsammans.api
             {
                 assembly = Assembly.Load(requestedAssembly.Name);
             }
-            catch (Exception ex)
-            {
-            }
+            catch (Exception) {}
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
             return assembly;
         }
