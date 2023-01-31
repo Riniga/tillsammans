@@ -1,1 +1,1 @@
-dotnet build tillsammans.api
+dotnet build tillsammans.api/tillsammans_api.csproj
