@@ -1,0 +1,16 @@
+{
+  "name": "nodejs",
+  "version": "1.0.0",
+  "description": "static web to provide a graphic interface for users",
+  "main": "app.js",
+  "scripts": {
+    "start": "node ./app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Rickard Nisses-Gagnér",
+  "license": "GNU GENERAL PUBLIC LICENSE",
+  "devDependencies": {
+    "express": "^4.18.2",
+    "open": "^8.4.0"
+  }
+}
