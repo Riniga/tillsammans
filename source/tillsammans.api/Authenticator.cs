@@ -16,7 +16,7 @@ namespace tillsammans.api
     {
         static Authenticator()
         {
-            //FunctionsAssemblyResolver.RedirectAssembly();
+            FunctionsAssemblyResolver.RedirectAssembly();
         }
         [FunctionName("Login")]
         public static async Task<IActionResult> Login([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
