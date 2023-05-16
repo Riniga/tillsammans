@@ -1,0 +1,7 @@
+{
+    "users":
+    [
+        {"username":"Ingmar", "hashpassword": "24Vpqws5zGoUWkR6O95HB2BlYhW0zbMRaXMxVhIWx/Q=","fullname": "Ingmar Stenmark"},
+        {"test":"Ingmar", "hashpassword": "24Vpqws5zGoUWkR6O95HB2BlYhW0zbMRaXMxVhIWx/Q=","fullname": "Test Testsson"}
+    ]
+}

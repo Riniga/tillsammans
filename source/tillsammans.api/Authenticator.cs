@@ -18,6 +18,19 @@ namespace tillsammans.api
         {
             FunctionsAssemblyResolver.RedirectAssembly();
         }
+
+        [FunctionName("Testing")]
+        public static async Task<IActionResult> Testing([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
+        {
+            string userJson= await new StreamReader(req.Body).ReadToEndAsync();
+           Console.WriteLine("Authenticator initialized...");
+            var database = new JsonDatabase();
+            database.Test();
+
+            return new OkObjectResult(userJson);
+
+
+        }
         [FunctionName("Login")]
         public static async Task<IActionResult> Login([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
         {
