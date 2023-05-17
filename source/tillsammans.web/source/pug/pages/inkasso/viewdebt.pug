@@ -1,0 +1,21 @@
+﻿extends ../../templates/startpage.pug
+block content
+    h2.cover-heading Debt
+    hr
+    span Contract Name: 
+    input#form_contract(type="text" readonly)
+    
+    h2.cover-heading Transactions
+    table#debtstable_1.display
+        thead
+            tr
+                th Time
+                th Type 
+                th Amount
+        tbody
+    button#form_addpaymentbutton Add Payment
+   
+    
+block scripts 
+    script(src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js")
+    script(src="/scripts/inkasso/viewdebt.js")

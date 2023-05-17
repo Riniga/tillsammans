@@ -1,0 +1,17 @@
+﻿extends ../../templates/startpage.pug
+block content
+    h2.cover-heading Add person
+    hr
+    span Name: 
+    input#form_name(type="text")
+    br
+    span Contract: 
+    select#form_contract
+    br
+    span Amount: 
+    input#form_amount(type="text")
+    br
+    input#form_save(type="button", value="Save")
+   
+block scripts 
+    script(src="/scripts/inkasso/addperson.js")

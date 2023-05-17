@@ -1,0 +1,13 @@
+﻿extends ../../templates/startpage.pug
+block content
+    h2.cover-heading Add payment on debt
+    hr
+    input#form_debtId(type="hidden")
+    br
+    span Amount: 
+    input#form_amount(type="text")
+    br
+    input#form_save(type="button", value="Save")
+   
+block scripts 
+    script(src="/scripts/inkasso/addpayment.js")

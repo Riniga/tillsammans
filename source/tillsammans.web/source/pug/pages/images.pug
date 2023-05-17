@@ -1,0 +1,13 @@
+﻿extends ../templates/startpage.pug
+block content
+  main.inner(role='main')
+      h2.cover-heading Hämtar bilder med Azure Functions
+      div.row
+        div#filelist.column
+      div#result
+      form
+        input#fileItem(type="file")
+block scripts 
+  script(src="/scripts/azurestoragefunctions.js")
+      
+

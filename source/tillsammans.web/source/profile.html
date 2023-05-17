@@ -1,0 +1,114 @@
+
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tillsammans • Riksidrottsförbundet</title>
+    <meta name="description" content="A starter example with all elements and components used in Pico design system. Built with Pico CSS.">
+    <link rel="shortcut icon" href="/images/favicon.ico">
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+    <link rel="stylesheet" href="stylesheets/main.css">
+
+  </head>
+
+  <body>
+    <nav data-theme="light">
+        <ul>
+          <li>
+            <span>
+              <img class="headerlogo" src="/images/RF_horizontal_COLOR_POS_rgb_2018.svg" alt="Logotyp" />
+          </span>
+            
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <h1>tillsammans</h1>
+          </li>
+        </ul>
+        <ul id="login">
+          <li>
+              <button class="contrast" data-target="modal-example" onclick="toggleModal(event)">Logga in</button>
+          </li>
+        </ul>
+
+        <ul id="logout"> 
+          <li>
+            <div class="avatar">
+              <img src="images/user.svg" />
+              <div style="font-size: 1.3em; height: 64px; padding-top: 10px;"><span id="userFirstName">Name</span><br>(<a href="#" onclick="signOut()">logga ut</a>)</div>
+            </div>
+          </li>
+
+        </ul>
+      </nav>
+      
+    <main class="container">
+
+      <article id="article">
+        <h2>Profil</h2>
+        <div>
+          <div>Namn: Rickard Nisses-Gagnér</div>
+
+        </div>
+
+      </article>
+      
+
+    </main>
+
+    
+    
+    <footer>
+      <nav data-theme="light">
+        <ul>
+          <li>
+            <span>
+              <img class="headerlogo" src="/images/RF_horizontal_COLOR_POS_rgb_2018.svg" alt="Logotyp" />
+          </span>
+            
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <h1>Tillsammans</h1>
+          </li>
+        </ul>
+        <ul>
+          <li >
+            <span>Kontakt: <br><a hef="mailto:rickard@nisses-gagner.se">rickard@nisses-gagner.se</a></span>
+            
+          </li>
+        </ul>
+      </nav>
+    </div>
+    
+    <dialog id="modal-example">
+      <article>
+        <a href="#close" aria-label="Close" class="close" data-target="modal-example" onclick="toggleModal(event)"></a>
+        <h2>Logga in</h2>
+        <p>Använd dina inloggningsuppgifter från Idrott Online<br/> För att testa: användarnamn=test, lösenord=qwerty</p>
+        <section id="form">
+          <form>
+            <input type="text" id="username" name="text" placeholder="Användarnamn">
+            <input type="password" id="password" name="password" placeholder="Lösenord">
+            <label id="failedlogin">Felaktigt användarnamn eller lösenord</label>
+          </form>
+        </section>
+        
+
+        <footer>
+          <a href="#cancel" role="button" class="secondary" data-target="modal-example" onclick="toggleModal(event)">Avbryt</a>
+          <a href="#confirm" role="button" data-target="modal-example" onclick="signIn(event)">Logga in</a>
+        </footer>
+
+      </article>
+    </dialog>
+    <script src="/javascripts/modal.js"></script>
+    <script src="/javascripts/login.js"></script>
+
+  </body>
+
+</html>

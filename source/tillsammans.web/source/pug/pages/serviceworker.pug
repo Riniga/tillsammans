@@ -1,0 +1,28 @@
+﻿extends ../templates/startpage.pug
+block content
+  main.inner(role='main')
+      h2.cover-heading Service Worker 
+      div.row
+        div Demonstrate some functionality from the service worker
+      div.row
+        ul
+            li Cache pages to be available in offline mode
+            li Cache external data to be available on failure
+            li Push data from a server to all subscribing clients...
+      div.row
+        div 
+            h4 strings recieved from server:
+            code.border
+                | 15:33 Hello, this is from the server
+      div.row
+        div 
+            h4 send string to clinets (via server):
+            form
+                input(type='text') 
+                br
+                button Send
+      
+block scripts 
+  script(src="/scripts/azurestoragefunctions.js")
+      
+

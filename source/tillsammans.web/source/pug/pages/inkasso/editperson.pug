@@ -1,0 +1,23 @@
+﻿extends ../../templates/startpage.pug
+block content
+    h2.cover-heading Edit person
+    hr
+    span Name: 
+    input#form_name(type="text")
+    input#form_id(type="hidden")
+    input#form_save(type="button", value="Save")
+
+
+    h2.cover-heading Debts
+    table#debtstable_1.display
+        thead
+            tr
+                th Contract
+                th 
+        tbody
+    button#form_adddebtbutton Add Debt
+   
+    
+block scripts 
+    script(src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js")
+    script(src="/scripts/inkasso/editperson.js")

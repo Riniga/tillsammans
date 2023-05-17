@@ -1,0 +1,16 @@
+﻿extends ../../templates/startpage.pug
+block content
+    h2.cover-heading Add Debt
+    hr
+    input#form_personId(type="hidden")
+    br
+    span Contract: 
+    select#form_contract
+    br
+    span Amount: 
+    input#form_amount(type="text")
+    br
+    input#form_save(type="button", value="Save")
+   
+block scripts 
+    script(src="/scripts/inkasso/adddebt.js")

@@ -1,0 +1,16 @@
+﻿extends ../../templates/startpage.pug
+block content
+    h2.cover-heading Persons
+    table#personstable_1.display
+        thead
+            tr
+                th Name
+                th 
+        tbody
+    
+    button(onclick="window.location.href='/inkasso/addperson.html';") Add Person
+    
+    
+block scripts 
+    script(src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js")
+    script(src="/scripts/inkasso/persons.js")
