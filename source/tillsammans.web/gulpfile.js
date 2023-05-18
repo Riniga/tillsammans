@@ -18,9 +18,7 @@ const changed = require('gulp-changed');
 const pug = require('gulp-pug');
 
 function clear() {
-  return src('./public/*', {
-          read: false
-      })
+  return src('./public/*', {read: false})
       .pipe(clean());
 }
 
@@ -34,7 +32,7 @@ function js() {
       .pipe(rename({
           extname: '.min.js'
       }))
-      .pipe(dest('./public/javascript/'))
+      .pipe(dest('./public/javascripts/'))
 }
 
 function css() {
@@ -42,44 +40,34 @@ function css() {
 
   return src(source)
       .pipe(changed(source))
-      // .pipe(autoprefixer({
-      //     overrideBrowserslist: ['last 2 versions'],
-      //     cascade: false
-      // }))
-      // .pipe(rename({
-      //     extname: '.min.css'
-      // }))
-      // .pipe(cssnano())
+      .pipe(autoprefixer({
+          overrideBrowserslist: ['last 2 versions'],
+          cascade: false
+      }))
+      .pipe(rename({
+          extname: '.min.css'
+      }))
+      .pipe(cssnano())
       .pipe(dest('./public/stylesheets/'))
 }
 
 function html() {
-  return src('./source/pug/*.pug')
-  .pipe(
-    pug({
-      // Your options in here.
-    })
-  )
+  return src('./source/pug/pages/**/*.pug')
+  .pipe(pug({pretty: true}))
   .pipe(dest('./public'));
 }
 
-
-
-// Optimize images
-
 function img() {
-  return src('./source/imgages/*')
+  return src('./source/images/**/*.*')
       //.pipe(imagemin())
       .pipe(dest('./public/images'));
 }
 
-// Watch files
-
 function watchFiles() {
-  watch('./source/stylesheets/*', css);
-  watch('./source/javascripts/*', js);
-  watch('./source/images/*', img);
-  watch('./source/pug/*', html);
+  watch('./source/stylesheets/**/*.*', css);
+  watch('./source/javascripts/**/*.*', js);
+  watch('./source/images/**/*.*', img);
+  watch('./source/pug/**/*.*', html);
 }
 
 // Tasks to define the execution of the functions simultaneously or in series
@@ -87,6 +75,8 @@ function watchFiles() {
 exports.clean = clear;
 exports.js = js;
 exports.css = css;
+exports.html = html;
+exports.img = img;
 
 exports.watch = watchFiles;
 exports.default = series(clear, parallel(html, js, css, img));

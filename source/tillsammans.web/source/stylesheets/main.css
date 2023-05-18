@@ -2,7 +2,7 @@ body
 {
         font-family: proxima-nova,Arial,Helvetica,sans-serif;
 }
-nav 
+nav.topnavigation
 {
     background-color: white;
     border-bottom: 1px solid lightgrey;
@@ -11,6 +11,27 @@ nav
     padding-left: 16px;
     
 }
+footer{
+    bottom:0;
+    /* height: 94px; */
+    padding: 0px;
+    width: 100%;
+    text-align: center;
+    background-color: white;
+    border-top: 1px solid lightgrey;
+}
+
+footer li
+{
+    padding-top: 0px;
+    padding-bottom: 0px;
+
+}
+footer nav
+{
+    margin-left: 10px;
+    margin-right: 10px;
+}
 nav h1
 {
     margin-bottom: 0px;
@@ -18,11 +39,23 @@ nav h1
     font-size: 3em;
     font-weight: lighter;
 }
-.headerlogo
+
+nav h1 i
 {
-    height: 64px;
+    font-size: .7em;
+    font-weight: lighter;
 }
 
+.logo
+{
+    height: 64px;
+    padding: 0px;
+}
+hgroup 
+{
+    margin-top: 20px;
+    margin-bottom: 0px;
+}
 body > header
 {
     padding: 0px;
@@ -40,34 +73,77 @@ body > footer
     padding: 0px;
 }
 
-footer{
-    /* position: fixed; */
-    bottom:0;
-    /* height: 10px; */
-    padding: 0px;
-    width: 100%;
-    text-align: center;
-    border-top: 1px solid lightgrey;
-}
+
 
 #failedlogin
 {
     color: red;
     visibility: hidden
 }
-#logout
-{
-    /* visibility: collapse; */
-}
 
-.avatar 
+.loggedinuser 
 {
     width: 200px;
     font-size: 10px;
 }
-
-#logout img
+.profileimage
 {
     float: left;
-    height: 64px;
 }
+.profileimage img
+{
+    height: 64px;
+    width: 64px;
+}
+.profileinformation
+{
+    float: left;
+    font-size: 1.3em; 
+    height: 64px;
+    padding-top: 10px;
+}
+
+
+[role="tabs"] 
+{
+    display: flex;
+    cursor: pointer;
+}
+  
+[role="tabs"] section 
+{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    
+}
+  
+[role="tabs"] figure 
+{
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+  
+[role="tabs"] [type="radio"]:checked + figure 
+{
+    display: block;
+}
+
+nav[role="tab-control"] label 
+{
+    cursor: pointer;
+}
+
+nav[role="tab-control"] label:hover 
+{
+       text-decoration: underline; 
+}
+
+nav[role="tab-control"] label.active 
+{
+    color: var(--primary);
+    font-weight: bold;
+}
+  

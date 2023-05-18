@@ -1,0 +1,20 @@
+﻿doctype html
+head
+  meta(charset='utf-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1')
+  title Tillsammans &bull; Riksidrottsf&ouml;rbundet
+  meta(name='description' content='An application for cooperation.')
+  link(rel='shortcut icon' href='/images/favicon.ico')
+  link(rel='stylesheet' href='https://unpkg.com/@picocss/pico@latest/css/pico.min.css')
+  link(rel='stylesheet' href='stylesheets/main.min.css')
+
+body
+    include ../blocks/navbar.pug
+    block content
+    include ../blocks/footer.pug
+    include ../blocks/login_modal.pug
+
+    script(src='/javascripts/bundle.min.js')
+    block scripts
+    
+    

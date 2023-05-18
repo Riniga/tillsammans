@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tillsammans &bull; Riksidrottsf&ouml;rbundet</title>
+  <meta name="description" content="An application for cooperation.">
+  <link rel="shortcut icon" href="/images/favicon.ico">
+  <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+  <link rel="stylesheet" href="stylesheets/main.min.css">
+</head>
+<body>
+  <nav class="topnavigation" data-theme="light">
+    <ul>
+      <li><span><a href="/"><img class="logo" src="/images/Logotype_Svensk-Judo_RGB.png" alt="Logotyp"></a></span></li>
+    </ul>
+    <ul>
+      <li>
+        <h1>tillsammans -<i>för domare</i></h1>
+      </li>
+    </ul>
+    <ul id="login">
+      <li>
+        <button class="contrast" data-target="modal-signin" onclick="toggleModal(event)">Logga in</button>
+      </li>
+    </ul>
+    <ul id="logout">
+      <li>
+        <div class="loggedinuser">
+          <div class="profileimage"><a href="start.html"><img src="images/user.svg"></a></div>
+          <div class="profileinformation"><span id="userFirstName">Name</span><br>(<a href="#" onclick="signOut()">logga ut</a>)</div>
+        </div>
+      </li>
+    </ul>
+  </nav>
+  <main class="container">
+    <article id="article">
+      <nav role="tab-control">
+        <ul>
+          <li>
+            <label for="info">Personuppgifter</label>
+          </li>
+          <li>
+            <label for="tavlingar">Mina tävlingar</label>
+          </li>
+          <li>
+            <label for="domare">Domare</label>
+          </li>
+          <li>
+            <label for="karriarguide">Karriärguide</label>
+          </li>
+        </ul>
+      </nav>
+      <div role="tabs">
+        <section>
+          <input id="info" hidden="hidden" type="radio" name="tabs" checked="checked">
+          <figure>
+            <h2>Dina personuppgifter</h2>
+            <label>Namn
+              <input type="text" value="Rickard Nisses-Gagnér" readonly>
+            </label>
+            <label>Personnummer
+              <input type="text" value="730411-xxxx" readonly>
+            </label>
+            <label>Adress
+              <input type="text" value="Slipersgatan 13">
+            </label>
+            <label>Postnummer
+              <input type="text" value="254 70">
+            </label>
+            <label>Ort
+              <input type="text" value="KATTARP">
+            </label>
+            <label>Telefon (primär)
+              <input type="text" value="072-71 55 980">
+            </label>
+            <label>Telefon (sekundär)
+              <input type="text" value="">
+            </label>
+            <label>Mailadress
+              <input type="text" value="rickard@nisses-gagner.se">
+            </label>
+            <label>Klubb
+              <input type="text" value="Ängelholms Judoklubb">
+            </label>
+            <label>Zon
+              <input type="text" value="Södra zonen" readonly>
+            </label>
+          </figure>
+          <input id="domare" hidden="hidden" type="radio" name="tabs">
+          <figure>
+            <h2>Domare i Sverige</h2>
+            <table>  
+              <tr> 
+                <td>Namn </td>
+                <td>Licens </td>
+                <td>Zon</td>
+                <td>Klubb</td>
+              </tr>
+              <tr> 
+                <td>Rickard Nisses-Gagnér</td>
+                <td>N </td>
+                <td>Södra </td>
+                <td>Ängelholms Judoklubb</td>
+              </tr>
+            </table>
+          </figure>
+          <input id="tavlingar" hidden="hidden" type="radio" name="tabs">
+          <figure>
+            <h2>Tävlingar jag dömt</h2>
+            <table>  
+              <tr> 
+                <td>Datum</td>
+                <td>Tävlingsn namn</td>
+                <td>Ort</td>
+                <td>Land</td>
+                <td>Typ </td>
+                <td>poäng</td>
+              </tr>
+              <tr> 
+                <td>2023-05-15</td>
+                <td>Nordiska mästerskapen</td>
+                <td>Drammen</td>
+                <td>Norge</td>
+                <td>NM</td>
+                <td>1</td>
+              </tr>
+            </table>
+          </figure>
+          <input id="karriarguide" hidden="hidden" type="radio" name="tabs">
+          <figure>
+            <div role="tabs">
+              <section>
+                <div>
+                  <h2>Om du saknar licens </h2>
+                  <ul> 
+                    <li>Gå en regelkurs, du blir då erhåller då en aspirant-licens</li>
+                  </ul>
+                  <hr>
+                </div>
+                <div>
+                  <h2>Om du har en aspirant-licens</h2>
+                  <ul> 
+                    <li>Döm 10 tävlingar </li>
+                    <li>Zondomaransvarig tilldelar dig en D-licens eller en DU-licens( om du är under 18) vid tillfälle</li>
+                  </ul>
+                  <hr>
+                </div>
+                <div>
+                  <h2>Om du har en DU licens och fyller 18</h2>
+                  <ul> 
+                    <li>Zondomaransvarig tilldelar dig en D-licens vid tillfälle</li>
+                  </ul>
+                  <hr>
+                </div>
+                <div>
+                  <h2>Du är registrerad med licens: D-Licens</h2>
+                  <ul> 
+                    <li>Gå en en N-Licens kurs och godkänt resultat på det teoretiska provet.</li>
+                    <li>Döm 30 tävlingar </li>
+                    <li>Anmäl dig till ett praktiskt N-Licens test</li>
+                    <li>Vid godkänt praktiskt N-licens test erhålls N-licensen av examinator(er)</li>
+                  </ul>
+                  <hr>
+                </div>
+                <div>
+                  <h2>Om du har en N-Licens</h2>
+                  <p>Nästa licens för dig är Elit-Licens</p>
+                  <ul> 
+                    <li>Döm 50 tävlingar </li>
+                    <li>Anmäl dig till ett praktiskt Elit-Licens test</li>
+                    <li>Vid godkänt praktiskt N-licens test erhålls N-licensen av examinator(er)                                        </li>
+                  </ul>
+                </div>
+              </section>
+            </div>
+          </figure>
+        </section>
+      </div>
+    </article>
+  </main>
+  <footer>
+    <nav data-theme="light">
+      <ul>
+        <li><span><a href="/"><img class="logo" src="/images/Logotype_Svensk-Judo_RGB.png" alt="Logotyp"></a></span></li>
+      </ul>
+      <ul>
+        <li>
+          <h1>tillsammans -<i>för domare</i></h1>
+        </li>
+      </ul>
+      <ul>
+        <li><span>Kontakt: <br><a hef="mailto:rickard@nisses-gagner.se">rickard@nisses-gagner.se</a></span></li>
+      </ul>
+    </nav>
+  </footer>
+  <dialog id="modal-signin">
+    <article><a class="close" href="#close" aria-label="Close" data-target="modal-signin" onclick="toggleModal(event)"></a>
+      <h2>Logga in</h2>
+      <p>Anv&auml;nd dina inloggningsuppgifter fr&aring;n IdrottOnline<br> F&ouml;r att testa: anv&auml;ndarnamn=test, l&ouml;senord=qwerty</p>
+      <section id="form">
+        <form>
+          <input id="username" type="text" name="text" placeholder="Användarnamn">
+          <input id="password" type="password" name="password" placeholder="Lösenord">
+          <label id="failedlogin">Felaktigt anv&auml;ndarnamn eller l&ouml;senord</label>
+        </form>
+      </section>
+      <footer><a class="secondary" href="#cancel" role="button" data-target="modal-signin" onclick="toggleModal(event)">Avbryt</a><a href="#confirm" role="button" data-target="modal-example" onclick="signIn()">Logga in</a></footer>
+    </article>
+  </dialog>
+  <script src="/javascripts/bundle.min.js"></script>
+</body>

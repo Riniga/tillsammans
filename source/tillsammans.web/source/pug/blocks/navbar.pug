@@ -1,5 +1,25 @@
-nav.navbar.navbar-dark.sticky-top.bg-dark.flex-md-nowrap.p-0
-    a.navbar-brand.col-sm-3.col-md-2.mr-0(href='#') Azure Web App
-    ul.navbar-nav.px-3
-        li.nav-item.text-nowrap
-            a#loginLink.nav-link(href="#"  data-toggle='modal' data-target='#loginModal') Logga in
+nav.topnavigation(data-theme='light')
+  ul
+    li
+      span
+        a(href="/")
+          img.logo(src='/images/Logotype_Svensk-Judo_RGB.png' alt='Logotyp')
+  ul
+    li
+      h1 tillsammans -
+        i för domare
+  ul#login
+    li
+      button.contrast(data-target='modal-signin' onclick='toggleModal(event)') Logga in
+  ul#logout
+    li
+      .loggedinuser
+        div.profileimage
+          a(href='start.html')
+            img(src='images/user.svg')
+        div.profileinformation
+          span#userFirstName Name
+          br
+          | (
+          a(href='#' onclick='signOut()') logga ut
+          | )

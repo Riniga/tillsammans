@@ -9,6 +9,8 @@ using Newtonsoft.Json.Linq;
 using System;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Text;
+using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace tillsammans.api
 {
@@ -37,9 +39,14 @@ namespace tillsammans.api
             //TODO: Could this be simplified are we reaching over the river for water?
             string userJson= await new StreamReader(req.Body).ReadToEndAsync();
             var userObject = JObject.Parse(userJson);
-            User user  = User.LoginUser(userObject.ToObject<User>());
+            var user = userObject.ToObject<User>();
             user.Password = HashPassword(user.Password); //TODO: Should and Could the password be hashed before sending it to service?
-            return new OkObjectResult(User.LoginUser(user));
+            
+            Logger.Instance.Log("Try to login user: " +user.Username);
+            user = User.LoginUser(user);
+
+            Logger.Instance.Log("Return user on login:" + JsonConvert.SerializeObject(user) ); 
+            return new OkObjectResult(user);
         }
         [FunctionName("Logout")]
         public static async Task<IActionResult> Logout([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
@@ -50,6 +57,17 @@ namespace tillsammans.api
             
             return new OkObjectResult(User.LogoutUser(user));
         }
+
+        [FunctionName("CreateUser")]
+        public static async Task<IActionResult> CreateUser([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
+        {
+            string userJson= await new StreamReader(req.Body).ReadToEndAsync();
+            var userObject = JObject.Parse(userJson);
+            var user = userObject.ToObject<User>();
+            user.Password = HashPassword(user.Password); //TODO: Should and Could the password be hashed before sending it to service?
+            return new OkObjectResult(user);
+        }
+
         private static string HashPassword(string password)
         {
             string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(

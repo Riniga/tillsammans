@@ -9,21 +9,6 @@ public class JsonDatabase : Database
 
     public void Test()
     {
-
-        var user1 = new User() { Username = "Test", Password = "24Vpqws5zGoUWkR6O95HB2BlYhW0zbMRaXMxVhIWx/Q=", FullName = "Test Testsson" };
-        var user2 = new User() { Username = "Ingmar", Password = "24Vpqws5zGoUWkR6O95HB2BlYhW0zbMRaXMxVhIWx/Q=", FullName = "Ingmar Stenmark" };
-
-        
-
-        Users users = new Users();
-        users.AllUsers.Add(user1);
-        users.AllUsers.Add(user2);
-
-        string jsonString = JsonSerializer.Serialize(users);
-        Console.WriteLine(jsonString);
-
-
-
         //string fileName = "users.json"; 
         
         //string readText = File.ReadAllText(fileName);
@@ -53,6 +38,8 @@ public class JsonDatabase : Database
         user.Password = string.Empty;
         user.Token= new Guid(guid); // Guid.NewGuid();
         //TODO: Store user in database
+
+        Console.WriteLine("The users token is set to  " + user.Token);
         return user;
     }
     public override bool RemoveLoggedInUser(User user)
@@ -72,7 +59,3 @@ public class JsonDatabase : Database
     }
 }
 
-public class Users
-{
-    public List<User> AllUsers = new List<User>();
-}

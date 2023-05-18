@@ -8,7 +8,11 @@ public abstract class Database
     internal abstract bool VerifyUserToken(User user);
     internal static Database GetDatabase<T>()
     {
-        return new JsonDatabase();
+        return (Database)Activator.CreateInstance(typeof(T));
+    }
+    internal static Database GetDefaultDatabase()
+    {
+        return GetDatabase<MemoryDatabase>();
     }
 
     

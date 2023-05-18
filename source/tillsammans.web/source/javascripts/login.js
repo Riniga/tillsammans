@@ -3,13 +3,15 @@ class User {
       this.username = username;
       this.name = name;
     }
-  }
+}
 
 function signIn()
 {
     var username = document.getElementById("username").value;
     var password = document.getElementById("password").value;
     
+    
+
     fetch("http://localhost:7071/api/Login",
         {
             method: 'post',
@@ -21,10 +23,12 @@ function signIn()
         .then(response => response.json())
         .then(data =>
         {
+            console.log("token: "+data.token);
             if (data.token!="00000000-0000-0000-0000-000000000000") 
             {
+                
                 SuccessfullLogin(data);
-                window.location.href = "/feed.html";
+                window.location.href = "/start.html";
             }
             else  
                 ShowFailedLogin();
