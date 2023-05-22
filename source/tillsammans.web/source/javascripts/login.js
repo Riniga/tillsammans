@@ -18,7 +18,7 @@ function signIn()
             headers: {
                 'Content-Type': 'application/text',
             },
-            body: "{ username: '" + username + "', password: '" + password + "'  }"
+            body: "{ email: '" + username + "', password: '" + password + "'  }"
         })
         .then(response => response.json())
         .then(data =>

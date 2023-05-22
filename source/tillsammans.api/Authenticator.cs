@@ -24,15 +24,12 @@ namespace tillsammans.api
         [FunctionName("Testing")]
         public static async Task<IActionResult> Testing([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
         {
-            string userJson= await new StreamReader(req.Body).ReadToEndAsync();
-           Console.WriteLine("Authenticator initialized...");
-            var database = new JsonDatabase();
-            database.Test();
+            var database = new MemoryDatabase();
 
-            return new OkObjectResult(userJson);
-
-
+            var result = database.GetAllUsers();
+            return new OkObjectResult(result);
         }
+
         [FunctionName("Login")]
         public static async Task<IActionResult> Login([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
         {
@@ -42,7 +39,7 @@ namespace tillsammans.api
             var user = userObject.ToObject<User>();
             user.Password = HashPassword(user.Password); //TODO: Should and Could the password be hashed before sending it to service?
             
-            Logger.Instance.Log("Try to login user: " +user.Username);
+            Logger.Instance.Log("Try to login user: " +user.Email);
             user = User.LoginUser(user);
 
             Logger.Instance.Log("Return user on login:" + JsonConvert.SerializeObject(user) ); 

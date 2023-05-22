@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -7,15 +8,33 @@ public class MemoryDatabase : Database
 {
     public MemoryDatabase()
     {
-        var user1 = new User() { Username = "Ingmar", Password = "24Vpqws5zGoUWkR6O95HB2BlYhW0zbMRaXMxVhIWx/Q=", FullName = "Ingmar Stenmark", Token=Guid.NewGuid() };
-        var user2 = new User() { Username = "test", Password = "QuLWdRplKNXLjEz3IQyoJ8aGrY/OlPTOMWw2YidkzIk=", FullName = "Test Testsson", Token=Guid.NewGuid() };
+        //LoadFromJson();
+        var user1 = new User() { Email = "Ingmar", Password = "24Vpqws5zGoUWkR6O95HB2BlYhW0zbMRaXMxVhIWx/Q=", FullName = "Ingmar Stenmark", Token = Guid.NewGuid() };
+        var user2 = new User() { Email = "test", Password = "QuLWdRplKNXLjEz3IQyoJ8aGrY/OlPTOMWw2YidkzIk=", FullName = "Test Testsson", Token = Guid.NewGuid() };
         Users.Instance.AllUsers.Add(user1);
         Users.Instance.AllUsers.Add(user2);
     }
-    public override User GetUser(string username)
+
+    private static void LoadFromJson()
+    {
+        string fileName = "users.json";
+        string readText = File.ReadAllText(fileName);
+        Console.WriteLine(readText);
+
+        var users = JsonSerializer.Deserialize<List<User>>(readText);
+
+        Console.WriteLine(Users.Instance.AllUsers.Count);
+
+        foreach (var user in users)
+        {
+            Console.WriteLine("Email: " + user.Email);
+        }
+    }
+
+    public override User GetUser(string email)
     {
         foreach(User user in Users.Instance.AllUsers)
-        if (user.Username==username) return user;
+        if (user.Email == email) return user;
         return null;
     }
     public override User AddLoggedInUser(User user)
@@ -37,8 +56,13 @@ public class MemoryDatabase : Database
     }
     internal override bool VerifyUserToken(User user)
     {
-        var userinDb = (User)Users.Instance.AllUsers.Where(listuser => listuser.Username==user.Username);
+        var userinDb = (User)Users.Instance.AllUsers.Where(listuser => listuser.Email==user.Email);
         if(user.Token==userinDb.Token) return true;
         return false;
+    }
+
+    public List<User> GetAllUsers()
+    {
+        return Users.Instance.AllUsers;
     }
 }

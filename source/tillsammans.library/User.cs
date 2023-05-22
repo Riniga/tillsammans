@@ -1,14 +1,23 @@
 using System;
 public class User
 {
-    public string Username;
-    public string Password;
     public string FullName;
+    public string Personnumber;
+    public string Adress;
+    public string PostalCode;
+    public string City;
+    public string PrimaryPhone;
+    public string SecondaryPhone;
+    public string Email;
+    public string Club;
+    public string Zone;
+    public string Password;
     public Guid Token;
+
     public static User LoginUser(User user)
     {
         var database = Database.GetDefaultDatabase();
-        User userFromDb = database.GetUser(user.Username);
+        User userFromDb = database.GetUser(user.Email);
         if(userFromDb.Password==user.Password)
         {
             //Logger.Instance.Log("Correct password!");

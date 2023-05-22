@@ -1,7 +1,30 @@
-+{
-    "users":
-    [
-        {"username":"Ingmar", "hashpassword": "24Vpqws5zGoUWkR6O95HB2BlYhW0zbMRaXMxVhIWx/Q=","fullname": "Ingmar Stenmark"},
-        {"test":"test", "hashpassword": "QuLWdRplKNXLjEz3IQyoJ8aGrY/OlPTOMWw2YidkzIk=","fullname": "Test Testsson"}
-    ]
-}
+[
+  {
+    "fullName": "Ingmar Stenmark",
+    "personnumber": null,
+    "adress": null,
+    "postalCode": null,
+    "city": null,
+    "primaryPhone": null,
+    "secondaryPhone": null,
+    "Email": "Ingmar",
+    "club": null,
+    "zone": null,
+    "password": "24Vpqws5zGoUWkR6O95HB2BlYhW0zbMRaXMxVhIWx/Q=",
+    "token": "0fc1b838-b4c5-42e7-bb0a-d1f46e430646"
+  },
+  {
+    "fullName": "Test Testsson",
+    "personnumber": null,
+    "adress": null,
+    "postalCode": null,
+    "city": null,
+    "primaryPhone": null,
+    "secondaryPhone": null,
+    "Email": "test",
+    "club": null,
+    "zone": null,
+    "password": "QuLWdRplKNXLjEz3IQyoJ8aGrY/OlPTOMWw2YidkzIk=",
+    "token": "ab217ce3-4d31-433f-b05a-c5a7ede889fa"
+  }
+]
