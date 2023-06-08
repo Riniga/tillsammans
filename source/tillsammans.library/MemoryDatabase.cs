@@ -31,8 +31,9 @@ public class MemoryDatabase : Database
         }
     }
 
-    public override User GetUser(string email)
+    public async override Task<User> GetUser(string email)
     {
+        await CosmosHelper.GetContainer();
         foreach(User user in Users.Instance.AllUsers)
         if (user.Email == email) return user;
         return null;

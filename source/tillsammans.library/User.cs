@@ -17,7 +17,7 @@ public class User
     public static User LoginUser(User user)
     {
         var database = Database.GetDefaultDatabase();
-        User userFromDb = database.GetUser(user.Email);
+        User userFromDb =  database.GetUser(user.Email).Result;
         if(userFromDb.Password==user.Password)
         {
             //Logger.Instance.Log("Correct password!");
