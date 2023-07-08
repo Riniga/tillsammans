@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node ./app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build":  "gulp"
   },
   "author": "Rickard Nisses-Gagnér",
   "license": "GNU GENERAL PUBLIC LICENSE",
