@@ -146,4 +146,24 @@ nav[role="tab-control"] label.active
     color: var(--primary);
     font-weight: bold;
 }
-  
+
+#refereetable
+{
+  width: 100%;
+}
+#refereetable_wrapper
+{
+  overflow-x: hidden;
+}
+#refereetable_wrapper select, input[type=search]
+{
+  width: auto;
+}
+#refereetable_wrapper .dataTables_length
+{
+  float: left;
+}
+#refereetable_wrapper .dataTables_filter
+{
+  float: right;
+}

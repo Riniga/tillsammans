@@ -1,7 +1,6 @@
 ﻿extends ../templates/main.pug
 block content
     main.container
-        
         article#article
             nav(role='tab-control')
                 ul
@@ -14,50 +13,52 @@ block content
                     li
                         label(for='karriarguide') Karriärguide
             div(role='tabs')
-                section
+                section#PersonalInformationTab
                     input#info(hidden='hidden' type='radio' name='tabs' checked='checked')
                     figure
                         h2 Dina personuppgifter
                         label Namn
-                            input(type="text" value="Rickard Nisses-Gagnér" readonly)
+                            input#name(type="text" value="Rickard Nisses-Gagnér" readonly)
                         label Personnummer
-                            input(type="text" value="730411-xxxx" readonly)
+                            input#personnumber(type="text" value="730411-xxxx" readonly)
                         label Adress
-                            input(type="text" value="Slipersgatan 13")
+                            input#adress(type="text" value="Slipersgatan 13")
                         label Postnummer
-                            input(type="text" value="254 70")
+                            input#postalcode(type="text" value="254 70")
                         label Ort
-                            input(type="text" value="KATTARP")
+                            input#city(type="text" value="KATTARP")
 
                         label Telefon (primär)
-                            input(type="text" value="072-71 55 980")
+                            input#primaryphone(type="text" value="072-71 55 980")
 
                         label Telefon (sekundär)
-                            input(type="text" value="")
+                            input#secondaryphone(type="text" value="")
 
                         label Mailadress
-                            input(type="text" value="rickard@nisses-gagner.se")
+                            input#email(type="text" value="rickard@nisses-gagner.se")
 
                         label Klubb
-                            input(type="text" value="Ängelholms Judoklubb")
+                            input#club(type="text" value="Ängelholms Judoklubb")
 
                         label Zon
-                            input(type="text" value="Södra zonen" readonly)
+                            input#zone(type="text" value="Södra zonen" readonly)
 
                     input#domare(hidden='hidden' type='radio' name='tabs')
                     figure
                         h2 Domare i Sverige
-                        table   
-                            tr 
-                                td Namn 
-                                td Licens 
-                                td Zon
-                                td Klubb
-                            tr 
-                                td Rickard Nisses-Gagnér
-                                td N 
-                                td Södra 
-                                td Ängelholms Judoklubb
+                        table#refereetable   
+                            thead
+                                tr 
+                                    th Namn 
+                                    th Licens 
+                                    th Zon
+                                    th Klubb
+                            tbody
+                                tr 
+                                    td Rickard Nisses-Gagnér
+                                    td N 
+                                    td Södra 
+                                    td Ängelholms Judoklubb
 
 
 
@@ -116,8 +117,6 @@ block content
                                     ul 
                                         li Döm 50 tävlingar 
                                         li Anmäl dig till ett praktiskt Elit-Licens test
-                                        li Vid godkänt praktiskt N-licens test erhålls N-licensen av examinator(er)                                        
-                        
-                            
+                                        li Vid godkänt praktiskt N-licens test erhålls N-licensen av examinator(er)                                                                    
                             
                             

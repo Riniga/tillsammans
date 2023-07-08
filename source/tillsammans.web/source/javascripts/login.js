@@ -1,24 +1,29 @@
 class User {
-    constructor(username, name) {
-      this.username = username;
-      this.name = name;
+    constructor(email, fullname, password) {
+      this.email = email;
+      this.fullname = fullname;
+      this.password = password;
+    }
+}
+
+class Login {
+    constructor(email, token) {
+      this.email = email;
+      this.token = token;
     }
 }
 
 function signIn()
 {
-    var username = document.getElementById("username").value;
+    var email = document.getElementById("username").value;
     var password = document.getElementById("password").value;
-    
-    
+    const userObject = new User(email,"", password);
 
     fetch("http://localhost:7071/api/Login",
         {
             method: 'post',
-            headers: {
-                'Content-Type': 'application/text',
-            },
-            body: "{ email: '" + username + "', password: '" + password + "'  }"
+            headers: {'Content-Type': 'application/text' },
+            body: JSON.stringify(userObject) 
         })
         .then(response => response.json())
         .then(data =>
@@ -28,7 +33,6 @@ function signIn()
             {
                 
                 SuccessfullLogin(data);
-                window.location.href = "/start.html";
             }
             else  
                 ShowFailedLogin();
@@ -40,17 +44,53 @@ function signIn()
         });
 }
 
-function signOut()
+
+function SuccessfullLogin(login)
 {
-    localStorage.removeItem('currentUser');
-    
-    ResetLoginUI();
+    localStorage.setItem('currentLogin', JSON.stringify(login) );
+    setCurrentUser(login.email);
 }
 
-function SuccessfullLogin(user)
+function setCurrentUser(email)
 {
-    const userObject = new User(user.username, user.fullName);
-    localStorage.setItem('currentUser', JSON.stringify(userObject) );
+    fetch("http://localhost:7071/api/ReadUser?email=" + email,
+        {
+            method: 'get',
+            headers: {'Content-Type': 'application/text' }
+        })
+        .then(response => response.json())
+        .then(data =>
+        {
+            localStorage.setItem('currentUser', JSON.stringify(data) );
+            window.location.href = "/start.html";
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+}
+
+
+function signOut()
+{
+    currentLogin = localStorage.getItem('currentLogin');
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('currentLogin');
+
+    fetch("http://localhost:7071/api/Logout",
+        {
+            method: 'post',
+            headers: {'Content-Type': 'application/text' },
+            body: currentLogin 
+        })
+        .then(response => response.json())
+        .then(data =>
+        {
+            window.location.href = "/";
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+
     ResetLoginUI();
 }
 
@@ -70,7 +110,7 @@ function ResetLoginUI()
 
     if (currentUser)
     {
-        document.getElementById("userFirstName").innerHTML=JSON.parse(currentUser).name;
+        document.getElementById("userFirstName").innerHTML=JSON.parse(currentUser).fullname;
         loginItem.setAttribute('hidden', 'true');
         logoutItem.removeAttribute('hidden');
     }
