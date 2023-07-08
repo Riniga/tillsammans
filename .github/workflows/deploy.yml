@@ -13,7 +13,7 @@ jobs:
       uses: azure/CLI@v1
       with:
         inlineScript: |
-            az storage blob upload-batch --account-name storagetillsammans --auth-mode key -d '$web' -s ./tillsammans.web/source/images
+            az storage blob upload-batch --account-name storagetillsammans --auth-mode key -d '$web' -s ./source/tillsammans.web/source/images
     - name: Purge CDN endpoint
       uses: azure/CLI@v1
       with:
