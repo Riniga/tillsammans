@@ -48,11 +48,6 @@ jobs:
     
     # - name: Build Solution
     #   run: dotnet build ./source/tillsammans.sln
-    
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v2
-      with:
-        dotnet-version: 3.1
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
@@ -60,6 +55,13 @@ jobs:
         languages: ${{ matrix.language }}
         dotnet-version: ${{ matrix.dotnet-version }}
 
+
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v2
+      with:
+        dotnet-version: 3.1
+
+    
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
       with:
