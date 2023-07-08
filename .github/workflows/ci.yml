@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # language: [ 'csharp', 'javascript'  ]
+        language: [ 'csharp', 'javascript'  ]
         language: [ 'csharp' ]
         node-version: [20.x]
         dotnet-version: ['3.1.x']
@@ -27,21 +27,21 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    # - name: Setup Node.js ${{ matrix.node-version }}
-    #   uses: actions/setup-node@v3
-    #   with:
-    #     node-version: ${{ matrix.node-version }}
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
 
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: ${{ matrix.dotnet-version }}
     
-    # - name: Build static site tillsammans.web
-    #   run: |
-    #     cd ./source/tillsammans.web
-    #     npm install
-    #     gulp
+    - name: Build static site tillsammans.web
+      run: |
+        cd ./source/tillsammans.web
+        npm install
+        gulp
         
     - name: Install dependencies
       run: dotnet restore ./source/tillsammans.sln
