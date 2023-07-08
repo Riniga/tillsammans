@@ -65,3 +65,22 @@ jobs:
       uses: github/codeql-action/analyze@v2
       with:
         category: "/language:${{matrix.language}}"
+        
+    - uses: azure/login@v1
+      with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Upload to blob storage
+      uses: azure/CLI@v1
+      with:
+        inlineScript: |
+            az storage blob upload-batch --account-name storagetillsammans --auth-mode key -d '$web' -s ./source/tillsammans.web/public
+    #- name: Purge CDN endpoint
+    #  uses: azure/CLI@v1
+    #  with:
+    #    inlineScript: |
+    #       az cdn endpoint purge --content-paths  "/*" --profile-name "CDN_PROFILE_NAME" --name "CDN_ENDPOINT" --resource-group "judo.se"
+    
+    - name: logout
+      run: |
+            az logout
+      if: always()
