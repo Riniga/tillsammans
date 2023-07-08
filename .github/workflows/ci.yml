@@ -1,4 +1,4 @@
-name: NodeJS with Gulp
+name: Continues Integration
 
 on:
   push:
@@ -13,6 +13,7 @@ jobs:
     strategy:
       matrix:
         node-version: [16.x, 18.x, 20.x]
+        dotnet-version: ['3.1']
 
     steps:
     - uses: actions/checkout@v3
@@ -22,9 +23,18 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Build
+    - name: Build static site tillsammans.web
       run: |
         cd ./source/tillsammans.web
         npm install
         gulp
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.301
         
+    - name: Install dependencies
+      run: |
+        dotnet restore ./source/tillsammans.sln
+        dotnet build ./source/tillsammans.sln
