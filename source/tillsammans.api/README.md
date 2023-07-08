@@ -8,7 +8,18 @@ func installeras med: npm i -g azure-functions-core-tools@3 --unsafe-perm true
 starta med: func start --csharp
 Debug genom att "Attach to process" -> välj func bland processer
 
-
-
 ## CosmosDB
 För att emulera CosmosDB behvös Azure Cosmos DB Emulator https://aka.ms/cosmosdb-emulator Databasen måste skapas: https://localhost:8081/_explorer/index.html
+
+## Skapa local.settings.json
+{
+  "IsEncrypted": false,
+  "Host": {"CORS": "*"},
+  "Values": {
+    "EndpointUrl": "[Url]",
+    "PrimaryKey": "[Key]",
+    "DatabaseId": "JudoDatabase",
+    "UsersContainerId": "Users",
+    "LoginsContainerId": "Logins"
+  }
+}
