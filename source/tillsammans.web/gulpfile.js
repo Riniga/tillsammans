@@ -1,3 +1,8 @@
+var argv = require('yargs').argv;
+var isProduction = (argv.production === undefined) ? false : true;
+
+console.log(isProduction);
+
 const {
   src,
   dest,
@@ -23,16 +28,20 @@ function clear() {
 }
 
 function js() {
-  const source = './source/javascripts/*.js';
+  const source = ['./source/javascripts/*.js'];
+  
+  if (isProduction) source.push('!./source/javascripts/development.js')
+  else source.push('!./source/javascripts/production.js')
 
-  return src(source)
-      .pipe(changed(source))
-      .pipe(concat('bundle.js'))
-      .pipe(uglify())
-      .pipe(rename({
-          extname: '.min.js'
-      }))
-      .pipe(dest('./public/javascripts/'))
+  let jsbuild =  src(source)
+      //.pipe(changed(source))
+      .pipe(concat('bundle.js'));
+      
+      if (isProduction)
+      {
+        jsbuild=jsbuild.pipe(uglify());//.pipe(rename({extname: '.min.js' }));
+      }
+      return jsbuild.pipe(dest('./public/javascripts/'))
 }
 
 function css() {

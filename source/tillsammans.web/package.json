@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node ./app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build":  "gulp"
+    "build": "gulp --production"
   },
   "author": "Rickard Nisses-Gagnér",
   "license": "GNU GENERAL PUBLIC LICENSE",
@@ -23,6 +23,7 @@
     "gulp-rename": "^2.0.0",
     "gulp-sass": "^5.1.0",
     "gulp-uglify": "^3.0.2",
-    "open": "^8.4.0"
+    "open": "^8.4.0",
+    "yargs": "^17.7.2"
   }
 }

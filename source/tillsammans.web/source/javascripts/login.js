@@ -19,7 +19,7 @@ function signIn()
     var password = document.getElementById("password").value;
     const userObject = new User(email,"", password);
 
-    fetch("http://localhost:7071/api/Login",
+    fetch(apihostname + "/api/Login",
         {
             method: 'post',
             headers: {'Content-Type': 'application/text' },
@@ -53,7 +53,7 @@ function SuccessfullLogin(login)
 
 function setCurrentUser(email)
 {
-    fetch("http://localhost:7071/api/ReadUser?email=" + email,
+    fetch(apihostname + "/api/ReadUser?email=" + email,
         {
             method: 'get',
             headers: {'Content-Type': 'application/text' }
@@ -76,7 +76,7 @@ function signOut()
     localStorage.removeItem('currentUser');
     localStorage.removeItem('currentLogin');
 
-    fetch("http://localhost:7071/api/Logout",
+    fetch(apihostname + "/api/Logout",
         {
             method: 'post',
             headers: {'Content-Type': 'application/text' },

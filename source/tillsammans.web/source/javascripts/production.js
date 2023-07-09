@@ -1,0 +1,1 @@
+var apihostname = "https://tillsammans.azurewebsites.net
