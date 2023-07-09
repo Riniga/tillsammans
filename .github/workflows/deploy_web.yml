@@ -16,7 +16,7 @@ jobs:
       run: |
         cd ./source/tillsammans.web
         npm install
-        gulp
+        gulp --production
         
     - uses: azure/login@v1
       with:
