@@ -14,7 +14,11 @@ public class CosmosDatabase : DatabaseBase
         {
             await container.CreateItemAsync<DbUser>(user, new PartitionKey(user.Email));
         }
-        catch (Exception ex) { return false; }
+        catch (Exception ex) 
+        { 
+            Logger.Instance.Log("Create user failed: " + ex.ToString());
+            return false; 
+        }
         return true;
     }
 
@@ -24,7 +28,11 @@ public class CosmosDatabase : DatabaseBase
         ItemResponse<DbUser> response = null;
         try {
             response = await container.ReadItemAsync<DbUser>(email, new PartitionKey(email));
-        } catch (Exception ex) { return null; }
+        } catch (Exception ex) 
+        { 
+            Logger.Instance.Log("Get user <"+email+"> failed: " + ex.ToString());
+            return null; 
+        }
         return response.Resource;
     }
     public async override Task<List<DbUser>> ReadAllUsers()
@@ -48,7 +56,11 @@ public class CosmosDatabase : DatabaseBase
         {
             await container.ReplaceItemAsync<DbUser>(user, user.Email, new PartitionKey(user.Email));
         }
-        catch (Exception ex) { return false; }
+        catch (Exception ex) 
+        { 
+            Logger.Instance.Log("Update user failed: " + ex.ToString());
+            return false; 
+        }
         return true;
     }
     public async override Task<bool> DeleteUser(string email)
@@ -58,7 +70,11 @@ public class CosmosDatabase : DatabaseBase
         {
             await container.DeleteItemAsync<DbUser>(email, new PartitionKey(email));
         }
-        catch (Exception ex) { return false; }
+        catch (Exception ex) 
+        { 
+            Logger.Instance.Log("Delete user failed: " + ex.ToString());
+            return false; 
+        }
         return true;
     }
 
@@ -73,13 +89,17 @@ public class CosmosDatabase : DatabaseBase
         {
             await container.DeleteItemAsync<DbLogin>(login.Email, new PartitionKey(login.Email));
         }
-        catch (Exception ex) {  }
+        catch (Exception) {  }
 
         try
         {
             await container.CreateItemAsync<DbLogin>(login, new PartitionKey(user.Email));
         }
-        catch (Exception ex) { return new DbLogin(); }
+        catch (Exception ex) 
+        { 
+            Logger.Instance.Log("Create öogin failed: " + ex.ToString());
+            return new DbLogin(); 
+        }
 
         
         return login;
@@ -93,7 +113,11 @@ public class CosmosDatabase : DatabaseBase
                 var container = await GetContainer(ContainerType.Logins);
                 await container.DeleteItemAsync<DbLogin>(login.Email, new PartitionKey(login.Email));
             }
-            catch (Exception ex) { return false; }
+            catch (Exception ex) 
+            { 
+                Logger.Instance.Log("Logout user failed: " + ex.ToString());
+                return false; 
+            }
             return true;
         }
         return false;
@@ -106,10 +130,15 @@ public class CosmosDatabase : DatabaseBase
         try
         {
             response = await container.ReadItemAsync<DbLogin>(login.Email, new PartitionKey(login.Email));
+            if(login.Token == response.Resource.Token) return true;
         }
-        catch (Exception ex) { return false; }
+        catch (Exception ex) 
+        { 
+            Logger.Instance.Log("verify user "+login.Email+"  failed: " + ex.ToString());
+            return false; 
+        }
 
-        if(login.Token == response.Resource.Token) return true;
+        
         return false;
     }
 
