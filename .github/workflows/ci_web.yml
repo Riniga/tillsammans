@@ -1,4 +1,4 @@
-name: Continues Integration
+name: Web Continues Integration
 
 on:
   push:
