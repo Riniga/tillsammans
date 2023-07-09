@@ -20,7 +20,7 @@ $(document).ready(function () {
     var table = $('#refereetable').DataTable(
         {
             autoWidth: false,
-            ajax: { url: apihostname + '/api/ReadAllUser', dataSrc: "" },
+            ajax: { url: readAllUsersApiUrl, dataSrc: "" },
             columns: [
                 { data: 'fullname' },
                 { data: 'email' },
