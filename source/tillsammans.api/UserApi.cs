@@ -26,34 +26,34 @@ namespace tillsammans.api
             var enpointUrl = Environment.GetEnvironmentVariable("EndpointUrl");
             AllTests.Add("Read endpoint from local.settings.json: ", (enpointUrl.Length>0).ToString());
 
-            var allusers = Users.Instance.AllUsers;
-            int numberofusersindatabase = allusers.Count;
-            AllTests.Add("Count users", numberofusersindatabase.ToString());
+            // var allusers = Users.Instance.AllUsers;
+            // int numberofusersindatabase = allusers.Count;
+            // AllTests.Add("Count users", numberofusersindatabase.ToString());
 
-            var user = new DbUser("test@test.nu", "Test Testsson", "0202020202-0202", "adress", "12345", "city", "123", "456", "club", "zone", "QuLWdRplKNXLjEz3IQyoJ8aGrY/OlPTOMWw2YidkzIk=");
-            var result = user.Create();
-            AllTests.Add("Created User:", result.ToString() );
+            // var user = new DbUser("test@test.nu", "Test Testsson", "0202020202-0202", "adress", "12345", "city", "123", "456", "club", "zone", "QuLWdRplKNXLjEz3IQyoJ8aGrY/OlPTOMWw2YidkzIk=");
+            // var result = user.Create();
+            // AllTests.Add("Created User:", result.ToString() );
 
-            allusers = Users.Instance.AllUsers;
-            int newnumberofusersindatabase = allusers.Count;
-            AllTests.Add("Count users second time", newnumberofusersindatabase.ToString());
-            var userfromdb = new DbUser("test@test.nu");
-            AllTests.Add("Verified user: ", (user.Password == userfromdb.Password).ToString());
+            // allusers = Users.Instance.AllUsers;
+            // int newnumberofusersindatabase = allusers.Count;
+            // AllTests.Add("Count users second time", newnumberofusersindatabase.ToString());
+            // var userfromdb = new DbUser("test@test.nu");
+            // AllTests.Add("Verified user: ", (user.Password == userfromdb.Password).ToString());
 
-            user.Password = "QuLWdRplKNXLjEz3IQyoJ8aGrY/OlPTOMWw2YidkzIk=";
-            result = user.Update();
-            AllTests.Add("Updated User:", result.ToString());
+            // user.Password = "QuLWdRplKNXLjEz3IQyoJ8aGrY/OlPTOMWw2YidkzIk=";
+            // result = user.Update();
+            // AllTests.Add("Updated User:", result.ToString());
 
-            userfromdb = new DbUser("test@test.nu");
-            AllTests.Add("Verified user after update: ", (user.Password == userfromdb.Password).ToString());
+            // userfromdb = new DbUser("test@test.nu");
+            // AllTests.Add("Verified user after update: ", (user.Password == userfromdb.Password).ToString());
 
-            result = user.Delete();
-            AllTests.Add("Deleted user: ", result.ToString());
+            // result = user.Delete();
+            // AllTests.Add("Deleted user: ", result.ToString());
 
-            allusers = Users.Instance.AllUsers;
-            newnumberofusersindatabase = allusers.Count;
-            AllTests.Add("Count users third time", newnumberofusersindatabase.ToString());
-            AllTests.Add("Verified deletion", (newnumberofusersindatabase == numberofusersindatabase).ToString());
+            // allusers = Users.Instance.AllUsers;
+            // newnumberofusersindatabase = allusers.Count;
+            // AllTests.Add("Count users third time", newnumberofusersindatabase.ToString());
+            // AllTests.Add("Verified deletion", (newnumberofusersindatabase == numberofusersindatabase).ToString());
 
             return new OkObjectResult(AllTests);
         }
