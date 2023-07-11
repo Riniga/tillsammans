@@ -7,7 +7,7 @@ nav.topnavigation(data-theme='light')
   ul
     li
       h1 tillsammans -
-        i för domare
+        i för judodomare
   ul#login
     li
       button.contrast(data-target='modal-signin' onclick='toggleModal(event)') Logga in
@@ -16,10 +16,30 @@ nav.topnavigation(data-theme='light')
       .loggedinuser
         div.profileimage
           a(href='start.html')
-            img(src='images/user.svg')
+            img#userGravatar(src='images/user.svg')
         div.profileinformation
           span#userFirstName Name
           br
           | (
           a(href='#' onclick='signOut()') logga ut
           | )
+nav.topmenu
+  ul 
+    li 
+      a(href="#") Start
+    li 
+      a(href="#") Personuppgifter
+    li 
+      a(href="#") Domare 
+    li 
+      a(href="#") Tävlingar 
+    li 
+      a(href="#") Forum 
+    li 
+      a(href="#") Karriärguiden
+    li 
+      a(href="#") Feedback 
+    li 
+      a(href="#") Admin 
+    
+

@@ -110,6 +110,11 @@ function ResetLoginUI()
     if (currentUser)
     {
         document.getElementById("userFirstName").innerHTML=JSON.parse(currentUser).fullname;
+        var email = JSON.parse(currentUser).email;
+        var md5hash = CryptoJS.MD5(email).toString();
+
+        document.getElementById("userGravatar").src="https://www.gravatar.com/avatar/" + md5hash;
+
         loginItem.setAttribute('hidden', 'true');
         logoutItem.removeAttribute('hidden');
     }
