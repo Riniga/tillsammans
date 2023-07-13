@@ -1,0 +1,33 @@
+﻿extends ../templates/main.pug
+block content
+    main.container
+        article#article
+            nav(role='tab-control')
+                ul
+                    li
+                        label(for='aktuella') Aktuella tävlingar
+                    li
+                        label(for='antagna') Tävlingar du ska döma
+                    li
+                        label(for='history') Tävlingar jag dömt
+                    li
+            div(role='tabs')
+                section
+                    input#aktuella(hidden='hidden' type='radio' name='tabs' checked='checked')
+                    h3 Aktuella tävlingar
+                    table   
+                        tr 
+                            td Datum
+                            td Tävlingsn namn
+                            td Ort
+                            td Land
+                            td Typ 
+                            td poäng
+                        tr 
+                            td 2023-05-15
+                            td Nordiska mästerskapen
+                            td Drammen
+                            td Norge
+                            td NM
+                            td 1
+

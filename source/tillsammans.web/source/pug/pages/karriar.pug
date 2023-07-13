@@ -1,0 +1,62 @@
+﻿extends ../templates/main.pug
+block content
+    main.container
+        article#article
+            b Vilken licens har du?
+            nav(role='tab-control')
+                ul
+                    li
+                        label(for='nolicense') Ingen licens
+                    li
+                        label(for='aspirant') Aspirant
+                    li
+                        label(for='du') Distrikt ungdom
+                    li
+                        label(for='d') Distrikt
+                    li
+                        label(for='n') Nationell
+                    li
+                        label(for='elit') Elit
+                    li
+                        label(for='ijf-b') IJF-B
+                    li
+                        label(for='ijf-a') IJF-A
+                    
+            div(role='tabs')
+                section#PersonalInformationTab
+                    input#nolicense(hidden='hidden' type='radio' name='tabs' checked='checked')
+                    figure
+                        h2 Om du saknar licens 
+                        ul 
+                            li Gå en regelkurs, då erhåller du en aspirant-licens
+                    input#aspirant(hidden='hidden' type='radio' name='tabs')
+                    figure
+                        h2 Om du har en aspirant-licens
+                        ul 
+                            li Döm 10 tävlingar 
+                            li Zondomaransvarig tilldelar dig en D-licens eller en DU-licens( om du är under 18) vid tillfälle
+                    input#du(hidden='hidden' type='radio' name='tabs')
+                    figure
+                        h2 Om du har en DU licens och fyller 18
+                        ul 
+                            li Zondomaransvarig tilldelar dig en D-licens vid tillfälle
+
+                    input#d(hidden='hidden' type='radio' name='tabs')
+                    figure
+                        h2 Du är registrerad med licens: D-Licens
+                        ul 
+                            li Gå en en N-Licens kurs och godkänt resultat på det teoretiska provet.
+                            li Döm 30 tävlingar 
+                            li Anmäl dig till ett praktiskt N-Licens test
+                            li Vid godkänt praktiskt N-licens test erhålls N-licensen av examinator(er)
+                    
+                    input#n(hidden='hidden' type='radio' name='tabs')
+                    figure
+                        h2 Om du har en N-Licens
+                        p Nästa licens för dig är Elit-Licens
+                        ul 
+                            li Döm 50 tävlingar 
+                            li Anmäl dig till ett praktiskt Elit-Licens test
+                            li Vid godkänt praktiskt N-licens test erhålls N-licensen av examinator(er)                                                                    
+                            
+                            
