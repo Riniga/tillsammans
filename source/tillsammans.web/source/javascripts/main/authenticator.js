@@ -61,7 +61,7 @@ function setCurrentUser(email)
         .then(data =>
         {
             localStorage.setItem('currentUser', JSON.stringify(data) );
-            window.location.href = "/domare.html";
+            window.location.href = "/referees.html";
         })
         .catch((error) => {
             console.log(error);
