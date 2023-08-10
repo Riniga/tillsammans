@@ -27,11 +27,9 @@ Dokumentation av funktionalitet finns samlad [här](documentation/requirement.md
 - Varje tjänst beskrivs under resp. katalog med en readme.md m.m.
 
 ### Tjänster
-- **nodejs** - Statisk webbplats för att tillhandahålla grafiskt gränssnitt för användarna
+- **web** - Statisk webbplats för att tillhandahålla grafiskt gränssnitt för användarna
 - **api** - C# .NET för att tillhandahålla REST API
 - **library** - C# .NET bibliotek för grundläggande modeller etc
-
-
 
 ## Workflows
 ### Setup developemnt environemnt

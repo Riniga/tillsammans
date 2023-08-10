@@ -144,7 +144,8 @@ public class CosmosDatabase : DatabaseBase
 
     private async Task<Container> GetContainer(ContainerType containerType)
     {
-        var cosmosClient = new CosmosClient(Environment.GetEnvironmentVariable("EndpointUrl"), Environment.GetEnvironmentVariable("PrimaryKey"));
+        var primaryKey = Environment.GetEnvironmentVariable("PrimaryKey");
+        var cosmosClient = new CosmosClient(Environment.GetEnvironmentVariable("EndpointUrl"), primaryKey);
         Database database = await cosmosClient.CreateDatabaseIfNotExistsAsync(Environment.GetEnvironmentVariable("DatabaseId"));
         var container = (containerType == ContainerType.Users) ?
                             await database.CreateContainerIfNotExistsAsync("Users", "/email") :

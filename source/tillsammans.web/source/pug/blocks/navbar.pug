@@ -15,7 +15,7 @@ nav.topnavigation(data-theme='light')
     li
       .loggedinuser
         div.profileimage
-          a(href='start.html')
+          a(href='profile.html')
             img#userGravatar(src='images/user.svg')
         div.profileinformation
           span#userFirstName Name
@@ -23,23 +23,23 @@ nav.topnavigation(data-theme='light')
           | (
           a(href='#' onclick='signOut()') logga ut
           | )
-nav.topmenu
+nav#mainMenu.topmenu
   ul 
     li 
-      a(href="#") Start
+      a(href="/index.html") Hem
     li 
-      a(href="#") Personuppgifter
+      a(href="/domare.html") Domare 
     li 
-      a(href="#") Domare 
+      a(href="/tavlingar.html") Tävlingar 
     li 
-      a(href="#") Tävlingar 
+      a(href="/feed.html") Forum 
     li 
-      a(href="#") Forum 
+      a(href="/karriar.html") Karriärguiden
     li 
-      a(href="#") Karriärguiden
-    li 
-      a(href="#") Feedback 
-    li 
-      a(href="#") Admin 
+      a(href="/feedback.html") Feedback 
+    li
+      a(href="/profile.html") Min profil 
+    li#adminlink
+      a(href="/admin.html") Admin 
     
 

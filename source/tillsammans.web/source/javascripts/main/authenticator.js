@@ -44,7 +44,6 @@ function signIn()
         });
 }
 
-
 function SuccessfullLogin(login)
 {
     localStorage.setItem('currentLogin', JSON.stringify(login) );
@@ -62,7 +61,7 @@ function setCurrentUser(email)
         .then(data =>
         {
             localStorage.setItem('currentUser', JSON.stringify(data) );
-            window.location.href = "/start.html";
+            window.location.href = "/domare.html";
         })
         .catch((error) => {
             console.log(error);
@@ -102,10 +101,10 @@ function ShowFailedLogin()
 
 function ResetLoginUI()
 {
-
     currentUser = localStorage.getItem('currentUser');
     var loginItem = document.getElementById("login");
     var logoutItem = document.getElementById("logout");
+    var mainMenu  = document.getElementById("mainMenu");
 
     if (currentUser)
     {
@@ -117,11 +116,13 @@ function ResetLoginUI()
 
         loginItem.setAttribute('hidden', 'true');
         logoutItem.removeAttribute('hidden');
+        mainMenu.removeAttribute('hidden');
     }
     else
     {
         if (window.location.pathname!='/') window.location.href = "/";
         logoutItem.setAttribute('hidden', 'true');
+        mainMenu.setAttribute('hidden', 'true');
         loginItem.removeAttribute('hidden');
     }
 

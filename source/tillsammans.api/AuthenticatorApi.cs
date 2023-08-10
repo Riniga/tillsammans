@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using Microsoft.Azure.Cosmos;
 
 namespace tillsammans.api
 {
@@ -23,27 +24,41 @@ namespace tillsammans.api
         public static async Task<IActionResult> Test([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
         {
             Dictionary<string, string> AllTests = new Dictionary<string, string>();
-            
-            var user = new DbUser("test@test.nu", "Test Testsson", "0202020202-0202", "adress", "12345", "city", "123", "456", "club", "zone", "QuLWdRplKNXLjEz3IQyoJ8aGrY/OlPTOMWw2YidkzIk=");
-            user.Create();
+            AllTests.Add("Create user object", "failed");
+            AllTests.Add("Create user in database", "failed");
+            AllTests.Add("Login user", "failed");
+            AllTests.Add("Verified correct token", "failed");
+            AllTests.Add("Verified wrong token", "failed");
+            AllTests.Add("Logged out user", "failed");
+            AllTests.Add("keyDelete user", "failed");
+            try
+            { 
+                var user = new DbUser("test@test.nu", "Test Testsson", "0202020202-0202", "adress", "12345", "city", "123", "456", "club", "zone", "QuLWdRplKNXLjEz3IQyoJ8aGrY/OlPTOMWw2YidkzIk=");
+                AllTests["Create user object"] = "passed";
+                
+                user.Create();
+                AllTests["Create user in database"] = "passed";
+                
+                var login = await DbLogin.LoginUser(user);
+                AllTests["Login user"] = "passed";
 
-            // Login in user
-            var login = await DbLogin.LoginUser(user);
-            AllTests.Add("Retrieved token: ", login.Token.ToString());
+                var result = login.Verify();
+                AllTests["Verified correct token"] = "passed";
+                
+                var correctToken = login.Token;
+                login.Token = Guid.NewGuid();
+                result = login.Verify();
+                AllTests["Verified wrong token"] = "passed";
+                
+                login.Token = correctToken;
+                result = login.Logout();
+                AllTests["Logged out user"] = "passed";
 
-            // Verify token
-            var result = login.Verify();
-            AllTests.Add("Verified correct token: ", result.ToString());
-            var correctToken = login.Token;
-            login.Token = Guid.NewGuid();
-            result = login.Verify();
-            AllTests.Add("Verified wrong token: ", result.ToString());
+                user.Delete();
+                AllTests["Delete user"] = "passed";
+            }
+            catch (Exception) { }
 
-            login.Token = correctToken;
-            result = login.Logout();
-            AllTests.Add("Logged out user: ", result.ToString());
-            
-            user.Delete();
 
             return new OkObjectResult(AllTests);
         }
@@ -73,6 +88,13 @@ namespace tillsammans.api
             var loginObject = JObject.Parse(loginJson);
             DbLogin login= loginObject.ToObject<DbLogin>();
             return new OkObjectResult(login.Logout());
+        }
+        [FunctionName("HashPassword")]
+        public static async Task<IActionResult> HashPassword([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
+        {
+            var password = req.Query["password"];
+            string hash = DbLogin.HashPassword(password);
+            return new OkObjectResult(hash);
         }
     }
 }

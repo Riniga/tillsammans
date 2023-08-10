@@ -11,6 +11,9 @@ const {
   watch
 } = require('gulp');
 
+const fs = require('fs');
+const path = require('path');
+const merge = require('merge-stream');
 const uglify = require('gulp-uglify');
 const rename = require('gulp-rename');
 const sass = require('gulp-sass');
@@ -27,21 +30,31 @@ function clear() {
       .pipe(clean());
 }
 
-function js() {
-  const source = ['./source/javascripts/*.js'];
-  
-  if (isProduction) source.push('!./source/javascripts/development.js')
-  else source.push('!./source/javascripts/production.js')
+function getFolders(dir) 
+{
+  return fs.readdirSync(dir).filter(function(file) 
+  {
+      return fs.statSync(path.join(dir, file)).isDirectory();
+  });
+}
 
-  let jsbuild =  src(source)
-      //.pipe(changed(source))
-      .pipe(concat('bundle.js'));
-      
-      if (isProduction)
-      {
-        jsbuild=jsbuild.pipe(uglify());//.pipe(rename({extname: '.min.js' }));
-      }
-      return jsbuild.pipe(dest('./public/javascripts/'))
+function js() 
+{
+
+  if (isProduction) config = src('./source/javascripts/config/production.js').pipe(concat('config.js')).pipe(dest('./public/javascripts/'));
+  else config = src('./source/javascripts/config/development.js').pipe(concat('config.js')).pipe(dest('./public/javascripts/'));
+
+  var folders= getFolders("./source/javascripts")
+  folders = folders.filter(function (folder) { return folder !== 'config'; });
+
+  var tasks = folders.map(function(folder) 
+  {
+    const source = ['./source/javascripts/'+folder+'/*.js'];
+    var stream = src(source).pipe(concat(folder+'.js'))
+    if (isProduction) stream=stream.pipe(uglify()); 
+    return stream.pipe(dest('./public/javascripts/'));
+  });
+  return merge(config, tasks);
 }
 
 function css() {
