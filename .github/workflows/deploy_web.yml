@@ -1,4 +1,4 @@
-name: Deploy static web (manual)
+name: Deploy(manual) - Static Web 
 on: workflow_dispatch
 
 jobs:

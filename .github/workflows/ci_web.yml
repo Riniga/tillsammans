@@ -1,4 +1,4 @@
-name: Web Continues Integration
+name:  Continues Integration - Static Web
 
 on:
   push:
@@ -25,7 +25,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-
+    
     - name: Setup Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
@@ -35,7 +35,7 @@ jobs:
       run: |
         cd ./source/tillsammans.web
         npm install
-        gulp
+        gulp --production
         
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
@@ -61,9 +61,10 @@ jobs:
     #  uses: azure/CLI@v1
     #  with:
     #    inlineScript: |
-    #       az cdn endpoint purge --content-paths  "/*" --profile-name "CDN_PROFILE_NAME" --name "CDN_ENDPOINT" --resource-group "judo.se"
+    #       az cdn endpoint purge --content-paths  "/*" --profile-name "CDN_PROFILE_NAME" --name "CDN_ENDPOINT" --resource-group "RESOURCE_GROUP"
     
     - name: logout
       run: |
             az logout
       if: always()
+        

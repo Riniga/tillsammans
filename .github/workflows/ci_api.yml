@@ -1,5 +1,4 @@
-name: API Continues Integration
-
+name: Continues Integration - .NET Core function
 on:
   push:
     branches: [ "main" ]
@@ -8,9 +7,17 @@ on:
   schedule:
     - cron: '21 4 * * 1'
 
+env:
+  AZURE_FUNCTIONAPP_NAME: tillsammans
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: tillsammans.api\published
+  CONFIGURATION: Release
+  DOTNET_CORE_VERSION: 3.1.x
+  WORKING_DIRECTORY: source/tillsammans.api
+  LANGUAGE: csharp
+
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     permissions:
       actions: read
       contents: read
@@ -18,33 +25,33 @@ jobs:
 
     strategy:
       fail-fast: false
-      matrix:
-        language: [ 'csharp' ]
-        dotnet-version: ['3.1.x']
 
     steps:
-    - uses: actions/checkout@v3
-
+    - uses: actions/checkout@master
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: ${{ matrix.dotnet-version }}
-    
-    - name: Install dependencies
-      run: dotnet restore ./source/tillsammans.sln
-    
+        dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
+    - name: Restore
+      run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
       with:
-        languages: ${{ matrix.language }}
-        dotnet-version: ${{ matrix.dotnet-version }}
-
+        languages: ${{ env.LANGUAGE }}
+        dotnet-version:  ${{ env.DOTNET_CORE_VERSION }}
     - name: Autobuild
       uses: github/codeql-action/autobuild@v2
-      with:
-        dotnet-version: ${{ matrix.dotnet-version }}
-    
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
       with:
-        category: "/language:${{matrix.language}}"
+        category: "/language:${{ env.LANGUAGE }}"
+    - name: Build
+      run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
+    - name: Publish
+      run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}"
+    - name: Deploy to Azure Function App
+      uses: Azure/functions-action@v1
+      with:
+        app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+        publish-profile: ${{ secrets.tillsammans_FFFF }}
+        package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}

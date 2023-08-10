@@ -1,4 +1,4 @@
-name: Deploy .NET Core function (manual)
+name: Deploy(manual) - .NET Core function 
 on: workflow_dispatch
 env:
   AZURE_FUNCTIONAPP_NAME: tillsammans
