@@ -13,8 +13,21 @@ class Login {
     }
 }
 
+$(function() {
+    $('form').each(function() {
+        $(this).find('input').keypress(function(e) {
+            // Enter pressed?
+            if(e.which == 10 || e.which == 13) {
+                console.log("enter was pressed");
+                signIn();
+            }
+        });
+    });
+});
+
 function signIn()
 {
+    $('#cover-spin').show(0)
     var email = document.getElementById("username").value;
     var password = document.getElementById("password").value;
     const userObject = new User(email,"", password);
@@ -28,15 +41,8 @@ function signIn()
         .then(response => response.json())
         .then(data =>
         {
-            console.log("token: "+data.token);
-            if (data.token!="00000000-0000-0000-0000-000000000000") 
-            {
-                
-                SuccessfullLogin(data);
-            }
-            else  
-                ShowFailedLogin();
-
+            if (data.token!="00000000-0000-0000-0000-000000000000") SuccessfullLogin(data);
+            else ShowFailedLogin();
         })
         .catch((error) => {
             console.log(error);
@@ -94,6 +100,7 @@ function signOut()
 
 function ShowFailedLogin()
 {
+    $('#cover-spin').hide(0)
     document.getElementById("username").setAttribute('aria-invalid', 'true');
     document.getElementById("password").setAttribute('aria-invalid', 'true');
     document.getElementById("failedlogin").style.visibility = "visible";

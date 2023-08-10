@@ -7,7 +7,7 @@ dialog#modal-signin
       br
       |  Kontakta Rickard för att erhålla dina inloggningsuppgifter
     section#form
-      form
+      form(name="loginForm" target="#here" method="post" )
         input#username(type='text' name='text' placeholder='Användarnamn')
         input#password(type='password' name='password' placeholder='Lösenord')
         label#failedlogin Felaktigt anv&auml;ndarnamn eller l&ouml;senord
