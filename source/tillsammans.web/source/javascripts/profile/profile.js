@@ -9,6 +9,7 @@ function loadPersonalInformation()
     document.getElementById("city").value = currentUser.city;
     document.getElementById("primaryphone").value = currentUser.primaryphone;
     document.getElementById("secondaryphone").value = currentUser.secondaryphone;
+    document.getElementById("license").value = currentUser.license;
     document.getElementById("club").value = currentUser.club;
     document.getElementById("zone").value = currentUser.zone;
 }

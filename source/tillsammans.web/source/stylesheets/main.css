@@ -73,7 +73,10 @@ body > footer
     padding: 0px;
 }
 
-
+article
+{
+    padding-top: 10px;
+}
 
 #failedlogin
 {

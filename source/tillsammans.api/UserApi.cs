@@ -74,7 +74,27 @@ namespace tillsammans.api
 
             return new OkObjectResult(result);
         }
-        
+
+        [FunctionName("CreateUsers")]
+        public static async Task<IActionResult> CreateUsers([HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req, ILogger log)
+        {
+            string body = await new StreamReader(req.Body).ReadToEndAsync();
+            var bodyJson = JObject.Parse(body);
+
+            var usersArray = (JArray)bodyJson["users"];
+            var users = usersArray.ToObject<List<DbUser>>();
+
+            bool result = true;
+            foreach (var user in users)
+            {
+                user.Password = DbLogin.HashPassword(user.Password); //TODO: Should and Could the password be hashed before sending it to service?
+                result = user.Create();
+            }
+            
+            return new OkObjectResult(result);
+        }
+
+
         [FunctionName("ReadUser")]
         public static async Task<IActionResult> ReadUser([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
         {

@@ -23,6 +23,8 @@ public class DbUser
     public string PrimaryPhone;
     [JsonProperty(PropertyName = "secondaryphone")]
     public string SecondaryPhone;
+    [JsonProperty(PropertyName = "license")]
+    public string License;
     [JsonProperty(PropertyName = "club")]
     public string Club;
     [JsonProperty(PropertyName = "zone")]
@@ -31,7 +33,7 @@ public class DbUser
     public string Password;
 
     public DbUser() { }
-    public DbUser(string email, string fullName, string personnumber, string adress, string postalCode, string city, string primaryPhone, string secondaryPhone, string club, string zone, string password) 
+    public DbUser(string email, string fullName, string personnumber, string adress, string postalCode, string city, string primaryPhone, string secondaryPhone,string license, string club, string zone, string password) 
     {
         Email = email;
         FullName = fullName;
@@ -41,6 +43,7 @@ public class DbUser
         City = city;
         PrimaryPhone = primaryPhone;
         SecondaryPhone = secondaryPhone;
+        License = license;
         Club = club;
         Zone = zone;
         Password = password;
@@ -57,6 +60,7 @@ public class DbUser
         City = userfromdb.City;
         PrimaryPhone = userfromdb.PrimaryPhone;
         SecondaryPhone = userfromdb.SecondaryPhone;
+        License = userfromdb.License;
         Club = userfromdb.Club;
         Zone = userfromdb.Zone;
         Password = userfromdb.Password;
