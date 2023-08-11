@@ -16,17 +16,33 @@ function loadPersonalInformation()
 
 if (document.getElementById("PersonalInformationTab")) loadPersonalInformation(); 
 
-$(document).ready(function () {
-    var table = $('#refereetable').DataTable(
-        {
-            autoWidth: false,
-            ajax: { url: readAllUsersApiUrl, dataSrc: "" },
-            columns: [
-                { data: 'fullname' },
-                { data: 'email' },
-                { data: 'club' },
-                { data: 'zone' }
-            ],
-        }
-    );
-});
+function updateProfile()
+{
+    $('#cover-spin').show(0)
+    currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    currentUser.personnumber = document.getElementById("personnumber").value;
+    currentUser.adress = document.getElementById("adress").value;
+    currentUser.postalcode = document.getElementById("postalcode").value;
+    currentUser.city = document.getElementById("city").value;
+    currentUser.primaryphone = document.getElementById("primaryphone").value;
+    currentUser.secondaryphone = document.getElementById("secondaryphone").value;
+    currentUser.club = document.getElementById("club").value;
+    localStorage.setItem('currentUser', JSON.stringify(currentUser) );
+
+    fetch(updateUserApiUrl,
+    {
+        method: 'post',
+        headers: {'Content-Type': 'application/text' },
+        body: JSON.stringify(currentUser)
+    })
+    .then(response => response.json())
+    .then(data =>
+    {
+        $('#cover-spin').hide(0)
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+
+    $('#cover-spin').hide(0)            
+}

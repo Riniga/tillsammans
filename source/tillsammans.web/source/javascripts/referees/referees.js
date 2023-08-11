@@ -6,9 +6,10 @@ $(document).ready(function () {
             ajax: { url: readAllUsersApiUrl, dataSrc: "" },
             columns: [
                 { data: 'fullname' },
-                { data: 'email' },
+                { data: 'license' },
+                { data: 'zone' },
                 { data: 'club' },
-                { data: 'zone' }
+                { data: 'email' }
             ],
         }
     );
