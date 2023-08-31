@@ -1,50 +1,45 @@
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using Newtonsoft.Json;
+using Microsoft.Azure.Cosmos;
 using System;
-using System.Text;
-using System.Threading.Tasks;
 
 public class DbLogin
 {
-    [JsonProperty(PropertyName = "id")]
-    public string Id => Email;
-    [JsonProperty(PropertyName = "email")]
-    public string Email;
-    [JsonProperty(PropertyName = "token")]
-    public Guid Token;
+    private const string TableName = "Logins";
+    public Login Login;
 
-    public async static Task<DbLogin> LoginUser(DbUser user)
+    public DbLogin(Login login)
     {
-        var database = DatabaseBase.GetDefaultDatabase();
-        DbUser userFromDb =  database.ReadUser(user.Email).Result;
-        if(userFromDb.Password==user.Password)
+        this.Login = login;
+    }
+    public DbLogin(User user)
+    {
+        Create(user.Email, user.Password);
+    }
+
+    private void Create(string email, string password)
+    {
+        this.Login = new Login(email);
+        var userDb = new DbUser();
+        User userFromDb = userDb.Read(email);
+        if (userFromDb.Password == password)
         {
             Logger.Instance.Log("Correct password!");
-            return(await database.LoginUser(user));
+            this.Login.Token = Guid.NewGuid();
+            var client = Helper.GetTableClient(TableName);
+            client.DeleteEntity(this.Login.Email, this.Login.Email);
+            client.AddEntity(this.Login);
         }
-        Logger.Instance.Log("Wrong password (db.pass <> user.pass): " + userFromDb.Password + " <> " + user.Password);
-        return new DbLogin() { Email=user.Email};
-    }
-    public bool Logout()
-    {
-        var database = DatabaseBase.GetDefaultDatabase();
-        return database.LogoutUser(this).Result;
+        else Logger.Instance.Log("Wrong password (db.pass <> user.pass): " + userFromDb.Password + " <> " + password);
     }
 
-    public bool Verify()
+    public void Read()
     {
-        var database = DatabaseBase.GetDefaultDatabase();
-        return database.VerifyLogin(this).Result;
+        var client = Helper.GetTableClient(TableName);
+        this.Login = client.GetEntity<Login>(Login.Email, Login.Email);
     }
 
-    public static string HashPassword(string password)
+    public void Delete()
     {
-        string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-            password: password!,
-            salt: Encoding.ASCII.GetBytes("AzureWebsite"),
-            prf: KeyDerivationPrf.HMACSHA256,
-            iterationCount: 100000,
-            numBytesRequested: 256 / 8));
-        return hashed;
+        var client = Helper.GetTableClient(TableName);
+        client.DeleteEntity(Login.Email, Login.Email);
     }
 }

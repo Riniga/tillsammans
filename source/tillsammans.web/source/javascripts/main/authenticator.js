@@ -14,9 +14,8 @@ class Login {
 }
 
 $(function() {
-    $('form').each(function() {
+    $('#loginform').each(function() {
         $(this).find('input').keypress(function(e) {
-            // Enter pressed?
             if(e.which == 10 || e.which == 13) {
                 console.log("enter was pressed");
                 signIn();
@@ -137,5 +136,11 @@ function ResetLoginUI()
     document.getElementById("password").setAttribute('aria-invalid', 'false');
     document.getElementById("failedlogin").style.visibility = "hidden";
 }
+function resetPassword()
+{
+    document.getElementById("emailsent").style.visibility = "visible";
+    document.getElementById("resetpasswordform").style.visibility = "hidden";
+    document.getElementById("sendbutton").style.visibility = "hidden";
 
+}
 ResetLoginUI(); 

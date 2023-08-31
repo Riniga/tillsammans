@@ -1,0 +1,11 @@
+{
+  "IsEncrypted": false,
+  "Host": {
+    "CORS": "*"
+  },
+  "Values": {
+    "ConnectionString": "DefaultEndpointsProtocol=https;AccountName=judokastorage;AccountKey=Zu1geXbYOom0cCyDh1M0nN+Zubwe8EjcP4C6lxq6jbBwLW5hIsM1yER5r2i+WAeTjYXvwsuFDIsM+AStB8VE9A==;EndpointSuffix=core.windows.net",
+    "DatabaseId": "JudoDatabase",
+    "ContainerId": "Referees"
+  }
+}

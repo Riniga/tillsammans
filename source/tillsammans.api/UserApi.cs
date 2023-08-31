@@ -18,61 +18,19 @@ namespace tillsammans.api
             FunctionsAssemblyResolver.RedirectAssembly();
         }
 
-        [FunctionName("TestUserApi")]
-        public static async Task<IActionResult> TestUserApi([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
-        {
-            var AllTests = new List<string>();
-
-            try
-            { 
-            var endpointUrl = Environment.GetEnvironmentVariable("EndpointUrl");
-            AllTests.Add("Read endpoint from local.settings.json: passed ");
-
-                // var allusers = Users.Instance.AllUsers;
-                // int numberofusersindatabase = allusers.Count;
-                // AllTests.Add("Count users", numberofusersindatabase.ToString());
-
-                // var user = new DbUser("test@test.nu", "Test Testsson", "0202020202-0202", "adress", "12345", "city", "123", "456", "club", "zone", "QuLWdRplKNXLjEz3IQyoJ8aGrY/OlPTOMWw2YidkzIk=");
-                // var result = user.Create();
-                // AllTests.Add("Created User:", result.ToString() );
-
-                // allusers = Users.Instance.AllUsers;
-                // int newnumberofusersindatabase = allusers.Count;
-                // AllTests.Add("Count users second time", newnumberofusersindatabase.ToString());
-                // var userfromdb = new DbUser("test@test.nu");
-                // AllTests.Add("Verified user: ", (user.Password == userfromdb.Password).ToString());
-
-                // user.Password = "QuLWdRplKNXLjEz3IQyoJ8aGrY/OlPTOMWw2YidkzIk=";
-                // result = user.Update();
-                // AllTests.Add("Updated User:", result.ToString());
-
-                // userfromdb = new DbUser("test@test.nu");
-                // AllTests.Add("Verified user after update: ", (user.Password == userfromdb.Password).ToString());
-
-                // result = user.Delete();
-                // AllTests.Add("Deleted user: ", result.ToString());
-
-                // allusers = Users.Instance.AllUsers;
-                // newnumberofusersindatabase = allusers.Count;
-                // AllTests.Add("Count users third time", newnumberofusersindatabase.ToString());
-                // AllTests.Add("Verified deletion", (newnumberofusersindatabase == numberofusersindatabase).ToString());
-            }catch (Exception) { }
-
-            return new OkObjectResult(AllTests);
-        }
-
         [FunctionName("CreateUser")]
         public static async Task<IActionResult> CreateUser([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
         {
             // TODO: Verify token 
             string userJson = await new StreamReader(req.Body).ReadToEndAsync();
             var userObject = JObject.Parse(userJson);
-            var user = userObject.ToObject<DbUser>();
-            user.Password = DbLogin.HashPassword(user.Password); //TODO: Should and Could the password be hashed before sending it to service?
+            var user = userObject.ToObject<User>();
+            user.Password = Helper.HashPassword(user.Password); //TODO: Should and Could the password be hashed before sending it to service?
 
-            var result = user.Create();
+            var dbUser = new DbUser();
+            dbUser.Create(user);
 
-            return new OkObjectResult(result);
+            return new OkObjectResult(true);
         }
 
         [FunctionName("CreateUsers")]
@@ -82,13 +40,14 @@ namespace tillsammans.api
             var bodyJson = JObject.Parse(body);
 
             var usersArray = (JArray)bodyJson["users"];
-            var users = usersArray.ToObject<List<DbUser>>();
+            var users = usersArray.ToObject<List<User>>();
 
             bool result = true;
+            var dbUser = new DbUser();
             foreach (var user in users)
             {
-                user.Password = DbLogin.HashPassword(user.Password); //TODO: Should and Could the password be hashed before sending it to service?
-                result = user.Create();
+                user.Password = Helper.HashPassword(user.Password); //TODO: Should and Could the password be hashed before sending it to service?
+                dbUser.Create(user);
             }
             
             return new OkObjectResult(result);
@@ -99,14 +58,18 @@ namespace tillsammans.api
         public static async Task<IActionResult> ReadUser([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
         {
             // TODO: Verify token 
-            var user = new DbUser(req.Query["email"]);
+
+            var dbUser = new DbUser();
+            var user = dbUser.Read(req.Query["email"]);
             user.Password = String.Empty;
             return new OkObjectResult(user);
         }
         [FunctionName("ReadAllUser")]
         public static async Task<IActionResult> ReadAllUser([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
         {
-            return new OkObjectResult(Users.Instance.AllUsers );
+            var dbUser = new DbUser();
+            var users = dbUser.ReadAll();
+            return new OkObjectResult(users);
         }
 
         [FunctionName("UpdateUser")]
@@ -114,13 +77,14 @@ namespace tillsammans.api
         {
             string userJson = await new StreamReader(req.Body).ReadToEndAsync();
             var userObject = JObject.Parse(userJson);
-            var user = userObject.ToObject<DbUser>();
+            var user = userObject.ToObject<User>();
 
             // TODO: Handle password???
             // TODO: Verify token 
+            var dbUser = new DbUser();
 
-            var result = user.Update();
-            return new OkObjectResult(result);
+            dbUser.Update(user);
+            return new OkObjectResult(true);
         }
 
         
