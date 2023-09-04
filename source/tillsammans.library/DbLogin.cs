@@ -31,10 +31,10 @@ public class DbLogin
         return database.LogoutUser(this).Result;
     }
 
-    public bool Verify()
+    public async static Task<DbUser> GetUserFromToken(string token)
     {
         var database = DatabaseBase.GetDefaultDatabase();
-        return database.VerifyLogin(this).Result;
+        return await database.GetUserFromToken(token);
     }
 
     public static string HashPassword(string password)

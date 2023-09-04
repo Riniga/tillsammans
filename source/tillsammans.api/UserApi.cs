@@ -8,6 +8,8 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Security.Principal;
+using Microsoft.Extensions.Primitives;
 
 namespace tillsammans.api
 {
@@ -80,7 +82,6 @@ namespace tillsammans.api
         {
             string body = await new StreamReader(req.Body).ReadToEndAsync();
             var bodyJson = JObject.Parse(body);
-
             var usersArray = (JArray)bodyJson["users"];
             var users = usersArray.ToObject<List<DbUser>>();
 
@@ -109,20 +110,45 @@ namespace tillsammans.api
             return new OkObjectResult(Users.Instance.AllUsers );
         }
 
+
         [FunctionName("UpdateUser")]
         public static async Task<IActionResult> UpdateUser([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
         {
-            string userJson = await new StreamReader(req.Body).ReadToEndAsync();
-            var userObject = JObject.Parse(userJson);
-            var user = userObject.ToObject<DbUser>();
+            string body = await new StreamReader(req.Body).ReadToEndAsync();
+            var bodyJson = JObject.Parse(body);
+            
+            var request = bodyJson.ToObject<AuthoraizedRequest>();
 
-            // TODO: Handle password???
-            // TODO: Verify token 
+            if(!IsAuthoraized(request.Token, "manager")) return new UnauthorizedResult();
+            var result = request.User.Update();
 
-            var result = user.Update();
             return new OkObjectResult(result);
         }
 
-        
+
+
+
+        [FunctionName("UpdateUserOld")]
+        public static async Task<IActionResult> UpdateUserOld([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
+        {
+            string userJson = await new StreamReader(req.Body).ReadToEndAsync();
+            var userObject = JObject.Parse(userJson);
+            var request = userObject.ToObject<AuthoraizedRequest>();
+            
+            if(!IsAuthoraized(request.Token, "manager")) return new UnauthorizedResult();
+            // TODO: Handle password???
+
+            var result = request.User.Update();
+
+            return new OkObjectResult(result);
+        }
+
+        private static bool IsAuthoraized(StringValues token, string role)
+        {
+            DbUser loggedInUser = DbLogin.GetUserFromToken(token).Result;
+            if (loggedInUser == null) return false; 
+            if (loggedInUser.Roles.Contains(role)) return true;
+            return false;
+        }
     }
 }

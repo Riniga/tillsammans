@@ -42,17 +42,16 @@ namespace tillsammans.api
                 var login = await DbLogin.LoginUser(user);
                 AllTests["Login user"] = "passed";
 
-                var result = login.Verify();
-                AllTests["Verified correct token"] = "passed";
+                var result = await DbLogin.GetUserFromToken(login.Token.ToString()) ;
+                if (result.Email==login.Email) AllTests["Verified correct token"] = "passed";
                 
                 var correctToken = login.Token;
                 login.Token = Guid.NewGuid();
-                result = login.Verify();
-                AllTests["Verified wrong token"] = "passed";
-                
+                result = await DbLogin.GetUserFromToken(login.Token.ToString()) ;
+                if (result==null) AllTests["Verified wrong token"] = "passed";
+
                 login.Token = correctToken;
-                result = login.Logout();
-                AllTests["Logged out user"] = "passed";
+                if (login.Logout()) AllTests["Logged out user"] = "passed";
 
                 user.Delete();
                 AllTests["Delete user"] = "passed";

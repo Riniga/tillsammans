@@ -1,6 +1,7 @@
 using Microsoft.Azure.Cosmos;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 public class DbUser
@@ -29,6 +30,8 @@ public class DbUser
     public string Club;
     [JsonProperty(PropertyName = "zone")]
     public string Zone;
+    [JsonProperty(PropertyName = "roles")]
+    public List<string> Roles;
     [JsonProperty(PropertyName = "password")]
     public string Password;
 
@@ -46,6 +49,7 @@ public class DbUser
         License = license;
         Club = club;
         Zone = zone;
+        Roles = new List<string>();
         Password = password;
     }
     public DbUser(string email)
@@ -63,6 +67,7 @@ public class DbUser
         License = userfromdb.License;
         Club = userfromdb.Club;
         Zone = userfromdb.Zone;
+        Roles = userfromdb.Roles;
         Password = userfromdb.Password;
     }
     public bool Create()
@@ -81,5 +86,10 @@ public class DbUser
         var database = DatabaseBase.GetDefaultDatabase();
         return database.DeleteUser(Email).Result;
 
+    }
+
+    public static implicit operator DbUser(FeedResponse<DbLogin> v)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -1,7 +1,7 @@
 ﻿extends ../templates/main.pug
 block content
     main.container
-        article#article
+        article
             b Vilken licens har du?
             nav(role='tab-control')
                 ul
@@ -26,24 +26,36 @@ block content
                 section#PersonalInformationTab
                     input#nolicense(hidden='hidden' type='radio' name='tabs' checked='checked')
                     figure
-                        h2 Om du saknar licens 
+                        h5 
+                            | Om du 
+                            u saknar licens
+                            | , så ska du:
                         ul 
                             li Gå en regelkurs, då erhåller du en aspirant-licens
                     input#aspirant(hidden='hidden' type='radio' name='tabs')
                     figure
-                        h2 Om du har en aspirant-licens
+                        h5 
+                            | Om du har en 
+                            u  aspirant-licens
+                            | , så ska du
                         ul 
                             li Döm 10 tävlingar 
-                            li Zondomaransvarig tilldelar dig en D-licens eller en DU-licens( om du är under 18) vid tillfälle
+                            li Zondomaransvarig tilldelar dig en D-licens eller en DU-licens(om du är under 18) vid nästa tävling
                     input#du(hidden='hidden' type='radio' name='tabs')
                     figure
-                        h2 Om du har en DU licens och fyller 18
+                        h5
+                            | Om du har en 
+                            u  DU-licens
+                            | , så 
                         ul 
-                            li Zondomaransvarig tilldelar dig en D-licens vid tillfälle
+                            li tilldelar Zondomaransvarig dig en D-licens vid nästa tävling efter att du fyllt 18 år
 
                     input#d(hidden='hidden' type='radio' name='tabs')
                     figure
-                        h2 Du är registrerad med licens: D-Licens
+                        h3
+                            | Om du har en 
+                            u  D-licens
+                            | , så ska du
                         ul 
                             li Gå en en N-Licens kurs och godkänt resultat på det teoretiska provet.
                             li Döm 30 tävlingar 
@@ -52,8 +64,10 @@ block content
                     
                     input#n(hidden='hidden' type='radio' name='tabs')
                     figure
-                        h2 Om du har en N-Licens
-                        p Nästa licens för dig är Elit-Licens
+                        h2
+                            | Om du har en 
+                            u  N-licens
+                            | , så ska du
                         ul 
                             li Döm 50 tävlingar 
                             li Anmäl dig till ett praktiskt Elit-Licens test

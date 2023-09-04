@@ -1,4 +1,5 @@
 using Microsoft.Azure.Cosmos;
+using Microsoft.Azure.Cosmos.Serialization.HybridRow.Layouts;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -106,7 +107,9 @@ public class CosmosDatabase : DatabaseBase
     }
     public async override Task<bool> LogoutUser(DbLogin login)
     {
-        if (await VerifyLogin(login)) 
+        string token = login.Token.ToString();
+        var user = await GetUserFromToken(token);
+        if (user.Email==login.Email) 
         {
             try
             {
@@ -122,24 +125,55 @@ public class CosmosDatabase : DatabaseBase
         }
         return false;
     }
-    internal async override Task<bool> VerifyLogin(DbLogin login)
+    public async override Task<DbUser> GetUserFromToken(string token)
     {
-
-        var container = await GetContainer(ContainerType.Logins);
-        ItemResponse<DbLogin> response = null;
         try
         {
-            response = await container.ReadItemAsync<DbLogin>(login.Email, new PartitionKey(login.Email));
-            if(login.Token == response.Resource.Token) return true;
+            var container = await GetContainer(ContainerType.Logins);
+
+            string query = "SELECT * FROM Logins WHERE Logins.token='" + token + "'";
+            Console.WriteLine(query);
+
+            var queryDefinition = new QueryDefinition(query);
+            var queryResultSetIterator = container.GetItemQueryIterator<DbLogin>(queryDefinition);
+
+            
+            while (queryResultSetIterator.HasMoreResults)
+            {
+                var currentResultSet = await queryResultSetIterator.ReadNextAsync();
+                foreach (var item in currentResultSet)
+                { 
+                    Console.WriteLine(item.Email);
+                    var user = await ReadUser(item.Email);
+                    return user;
+                }
+            }
+            
+            //var container = await GetContainer(ContainerType.Logins);
+            //var queryDefinition = new QueryDefinition("SELECT * FROM Logins WHERE token='"+token+"'");
+            
+            //using (FeedIterator<DbLogin> feedIterator = container.GetItemQueryIterator<DbLogin>(queryDefinition))
+            //{
+            //    while (feedIterator.HasMoreResults)
+            //    {
+            //        FeedResponse<DbLogin> response = await feedIterator.ReadNextAsync();
+            //        foreach (var item in response)
+            //        {
+            //            Console.WriteLine(item);
+            //            //var user = await ReadUser(login.Email);
+            //            //return user;
+            //        }
+
+            //    }
+            //}
+
         }
         catch (Exception ex) 
         { 
-            Logger.Instance.Log("verify user "+login.Email+"  failed: " + ex.ToString());
-            return false; 
+            Logger.Instance.Log("Retrieve login with token  "+token +"  failed: " + ex.ToString());
+            return null; 
         }
-
-        
-        return false;
+        return null;
     }
 
     private async Task<Container> GetContainer(ContainerType containerType)

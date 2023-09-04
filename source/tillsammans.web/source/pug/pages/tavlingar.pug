@@ -1,7 +1,7 @@
 ﻿extends ../templates/main.pug
 block content
     main.container
-        article#article
+        article
             nav(role='tab-control')
                 ul
                     li
@@ -14,20 +14,59 @@ block content
             div(role='tabs')
                 section
                     input#aktuella(hidden='hidden' type='radio' name='tabs' checked='checked')
-                    h3 Aktuella tävlingar
-                    table   
-                        tr 
-                            td Datum
-                            td Tävlingsn namn
-                            td Ort
-                            td Land
-                            td Typ 
-                            td poäng
-                        tr 
-                            td 2023-05-15
-                            td Nordiska mästerskapen
-                            td Drammen
-                            td Norge
-                            td NM
-                            td 1
-
+                    figure
+                        h3 Aktuella tävlingar
+                        p ->Under utveckling - fungerar inte, ännu...<-
+                        table   
+                            tr 
+                                td Datum
+                                td Tävlingsn namn
+                                td Ort
+                                td Land
+                                td Typ 
+                                td poäng
+                            tr 
+                                td 2023-05-15
+                                td Nordiska mästerskapen
+                                td Drammen
+                                td Norge
+                                td NM
+                                td 1
+                    input#antagna(hidden='hidden' type='radio' name='tabs')
+                    figure
+                        h3 Tävlingar du skall döma
+                        p ->Under utveckling - fungerar inte, ännu...<-
+                        table   
+                            tr 
+                                td Datum
+                                td Tävlingsn namn
+                                td Ort
+                                td Land
+                                td Typ 
+                                td poäng
+                            tr 
+                                td 2023-05-15
+                                td Nordiska mästerskapen
+                                td Drammen
+                                td Norge
+                                td NM
+                                td 1
+                    input#history(hidden='hidden' type='radio' name='tabs')
+                    figure
+                        h3 Tävlingar du har döma
+                        p ->Under utveckling - fungerar inte, ännu...<-
+                        table   
+                            tr 
+                                td Datum
+                                td Tävlingsn namn
+                                td Ort
+                                td Land
+                                td Typ 
+                                td poäng
+                            tr 
+                                td 2023-05-15
+                                td Nordiska mästerskapen
+                                td Drammen
+                                td Norge
+                                td NM
+                                td 1

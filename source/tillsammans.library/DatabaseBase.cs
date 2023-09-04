@@ -13,7 +13,7 @@ public abstract class DatabaseBase
     
     public abstract Task<DbLogin> LoginUser(DbUser user);
     public abstract Task<bool> LogoutUser(DbLogin login);
-    internal abstract Task<bool> VerifyLogin(DbLogin login);
+    public abstract Task<DbUser> GetUserFromToken(string token);
 
     internal static DatabaseBase GetDatabase<T>()
     {
