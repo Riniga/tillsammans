@@ -30,7 +30,7 @@ namespace tillsammans.api
             AllTests.Add("Verified correct token", "failed");
             AllTests.Add("Verified wrong token", "failed");
             AllTests.Add("Logged out user", "failed");
-            AllTests.Add("keyDelete user", "failed");
+            AllTests.Add("Delete user", "failed");
             try
             { 
                 var user = new DbUser("test@test.nu", "Test Testsson", "0202020202-0202", "adress", "12345", "city", "123", "456","license", "club", "zone", "QuLWdRplKNXLjEz3IQyoJ8aGrY/OlPTOMWw2YidkzIk=");

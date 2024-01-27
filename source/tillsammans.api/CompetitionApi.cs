@@ -21,7 +21,7 @@ namespace tillsammans.api
         }
 
         [FunctionName("CreateCompetition")]
-        public static async Task<IActionResult> CreateUser([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
+        public static async Task<IActionResult> CreateCompetition([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
         {
             string competitionJson = await new StreamReader(req.Body).ReadToEndAsync();
             var competitionObject = JObject.Parse(competitionJson);
@@ -31,71 +31,52 @@ namespace tillsammans.api
             return new OkObjectResult(result);
         }
 
-        [FunctionName("CreateUsers")]
-        public static async Task<IActionResult> CreateUsers([HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req, ILogger log)
+        [FunctionName("CreateCompetitions")]
+        public static async Task<IActionResult> CreateCompetitions([HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req, ILogger log)
         {
             string body = await new StreamReader(req.Body).ReadToEndAsync();
             var bodyJson = JObject.Parse(body);
-            var usersArray = (JArray)bodyJson["users"];
-            var users = usersArray.ToObject<List<DbUser>>();
+            var competitionsArray = (JArray)bodyJson["competitions"];
+            var competitions = competitionsArray.ToObject<List<DbCompetition>>();
 
             bool result = true;
-            foreach (var user in users)
+            foreach (var competition in competitions)
             {
-                user.Password = DbLogin.HashPassword(user.Password); //TODO: Should and Could the password be hashed before sending it to service?
-                result = user.Create();
+                result = competition.Create();
             }
             
             return new OkObjectResult(result);
         }
 
 
-        [FunctionName("ReadUser")]
-        public static async Task<IActionResult> ReadUser([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
+        [FunctionName("ReadCompetition")]
+        public static async Task<IActionResult> ReadCompetition([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
         {
             // TODO: Verify token 
-            var user = new DbUser(req.Query["email"]);
-            user.Password = String.Empty;
-            return new OkObjectResult(user);
+            var competition = new DbCompetition(req.Query["name"]);
+            return new OkObjectResult(competition);
         }
-        [FunctionName("ReadAllUser")]
-        public static async Task<IActionResult> ReadAllUser([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
+        [FunctionName("ReadAllCompetitions")]
+        public static async Task<IActionResult> ReadAllCompetitions([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
         {
-            return new OkObjectResult(Users.Instance.AllUsers );
+            return new OkObjectResult(Competitions.Instance.AllCompetitions);
         }
 
 
-        [FunctionName("UpdateUser")]
-        public static async Task<IActionResult> UpdateUser([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
+        [FunctionName("UpdateCompetition")]
+        public static async Task<IActionResult> UpdateCompetition([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
         {
             string body = await new StreamReader(req.Body).ReadToEndAsync();
             var bodyJson = JObject.Parse(body);
-            
             var request = bodyJson.ToObject<AuthoraizedRequest>();
 
             if(!IsAuthoraized(request.Token, "manager")) return new UnauthorizedResult();
-            var result = request.User.Update();
-
-            return new OkObjectResult(result);
-        }
-
-
-
-
-        [FunctionName("UpdateUserOld")]
-        public static async Task<IActionResult> UpdateUserOld([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
-        {
-            string userJson = await new StreamReader(req.Body).ReadToEndAsync();
-            var userObject = JObject.Parse(userJson);
-            var request = userObject.ToObject<AuthoraizedRequest>();
             
-            if(!IsAuthoraized(request.Token, "manager")) return new UnauthorizedResult();
-            // TODO: Handle password???
-
             var result = request.User.Update();
 
             return new OkObjectResult(result);
         }
+
 
         private static bool IsAuthoraized(StringValues token, string role)
         {

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 public class DbCompetition
 {
+    public static string ContainerName = "Competitions";
     [JsonProperty(PropertyName = "id")]
     public string Id;
     [JsonProperty(PropertyName = "responsibleemail")]
@@ -13,83 +14,45 @@ public class DbCompetition
     [JsonProperty(PropertyName = "name")]
     public string Name;
     [JsonProperty(PropertyName = "startdate")]
-    public string StartDate;
+    public DateTime StartDate;
     [JsonProperty(PropertyName = "enddate")]
-    public string EndDate;
-    [JsonProperty(PropertyName = "postalcode")]
-    public string PostalCode;
-    [JsonProperty(PropertyName = "location")]
-    public string Location;
-    [JsonProperty(PropertyName = "primaryphone")]
-    public string PrimaryPhone;
-    [JsonProperty(PropertyName = "secondaryphone")]
-    public string SecondaryPhone;
-    [JsonProperty(PropertyName = "license")]
-    public string License;
-    [JsonProperty(PropertyName = "club")]
-    public string Club;
-    [JsonProperty(PropertyName = "zone")]
-    public string Zone;
-    [JsonProperty(PropertyName = "roles")]
-    public List<string> Roles;
-    [JsonProperty(PropertyName = "password")]
-    public string Password;
+    public DateTime EndDate;
+
+    
 
     public DbCompetition() { }
-    public DbCompetition(string email, string fullName, string personnumber, string adress, string postalCode, string city, string primaryPhone, string secondaryPhone,string license, string club, string zone, string password) 
+    public DbCompetition(string responsible, string name, DateTime startDate, DateTime endDate) 
     {
-        Email = email;
-        FullName = fullName;
-        Personnumber = personnumber;
-        Adress = adress;
-        PostalCode = postalCode;
-        City = city;
-        PrimaryPhone = primaryPhone;
-        SecondaryPhone = secondaryPhone;
-        License = license;
-        Club = club;
-        Zone = zone;
-        Roles = new List<string>();
-        Password = password;
+        ResponsibleEmail = responsible;
+        Name = name;
+        StartDate = startDate;
+        EndDate = endDate;
     }
-    public DbUser(string email)
+    public DbCompetition(string name)
     {
         var database = DatabaseBase.GetDefaultDatabase();
-        var userfromdb = database.ReadUser(email).Result;
-        Email = userfromdb.Email;
-        FullName = userfromdb.FullName;
-        Personnumber = userfromdb.Personnumber;
-        Adress = userfromdb.Adress;
-        PostalCode = userfromdb.PostalCode;
-        City = userfromdb.City;
-        PrimaryPhone = userfromdb.PrimaryPhone;
-        SecondaryPhone = userfromdb.SecondaryPhone;
-        License = userfromdb.License;
-        Club = userfromdb.Club;
-        Zone = userfromdb.Zone;
-        Roles = userfromdb.Roles;
-        Password = userfromdb.Password;
+        var competitionfromdb = database.ReadCompetition(name).Result;
+        ResponsibleEmail = competitionfromdb.ResponsibleEmail;
+        Name = competitionfromdb.Name;
+        StartDate = competitionfromdb.StartDate;
+        EndDate = competitionfromdb.EndDate;
     }
     public bool Create()
     {
         var database = DatabaseBase.GetDefaultDatabase();
-        return database.CreateUser(this).Result;
+        return database.CreateCompetition(this).Result;
+
     }
     public bool Update()
     {
         var database = DatabaseBase.GetDefaultDatabase();
-        return database.UpdateUser(this).Result;
+        return database.UpdateCompetition(this).Result;
     }
 
     public bool Delete()
     {
         var database = DatabaseBase.GetDefaultDatabase();
-        return database.DeleteUser(Email).Result;
+        return database.DeleteCompetition(Name).Result;
 
-    }
-
-    public static implicit operator DbUser(FeedResponse<DbLogin> v)
-    {
-        throw new NotImplementedException();
     }
 }

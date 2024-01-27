@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 public class DbLogin
 {
+    public static string ContainerName = "Logins";
     [JsonProperty(PropertyName = "id")]
     public string Id => Email;
     [JsonProperty(PropertyName = "email")]

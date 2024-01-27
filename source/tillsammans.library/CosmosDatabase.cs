@@ -9,7 +9,7 @@ public class CosmosDatabase : DatabaseBase
 
     public async override Task<bool> CreateUser(DbUser user)
     {
-        var container = await GetContainer(ContainerType.Users);
+        var container = await GetContainer(DbUser.ContainerName);
         Logger.Instance.Log("Retrieved Cosmos Db Container: " + container.Id);
         try
         {
@@ -25,7 +25,7 @@ public class CosmosDatabase : DatabaseBase
 
     public async override Task<DbUser> ReadUser(string email)
     {
-        var container = await GetContainer(ContainerType.Users);
+        var container = await GetContainer(DbUser.ContainerName);
         ItemResponse<DbUser> response = null;
         try {
             response = await container.ReadItemAsync<DbUser>(email, new PartitionKey(email));
@@ -38,7 +38,7 @@ public class CosmosDatabase : DatabaseBase
     }
     public async override Task<List<DbUser>> ReadAllUsers()
     {
-        var container = await GetContainer(ContainerType.Users);
+        var container = await GetContainer(DbUser.ContainerName);
         var queryDefinition = new QueryDefinition("SELECT * FROM Users");
         var queryResultSetIterator = container.GetItemQueryIterator<DbUser>(queryDefinition);
 
@@ -52,7 +52,7 @@ public class CosmosDatabase : DatabaseBase
     }
     public async override Task<bool> UpdateUser(DbUser user)
     {
-        var container = await GetContainer(ContainerType.Users);
+        var container = await GetContainer(DbUser.ContainerName);
         try
         {
             await container.ReplaceItemAsync<DbUser>(user, user.Email, new PartitionKey(user.Email));
@@ -66,7 +66,7 @@ public class CosmosDatabase : DatabaseBase
     }
     public async override Task<bool> DeleteUser(string email)
     {
-        var container = await GetContainer(ContainerType.Users);
+        var container = await GetContainer(DbUser.ContainerName);
         try
         {
             await container.DeleteItemAsync<DbUser>(email, new PartitionKey(email));
@@ -80,12 +80,87 @@ public class CosmosDatabase : DatabaseBase
     }
 
 
+    public async override Task<bool> CreateCompetition(DbCompetition competition)
+    {
+        var container = await GetContainer(DbCompetition.ContainerName);
+        Logger.Instance.Log("Retrieved Cosmos Db Container: " + container.Id);
+        try
+        {
+            await container.CreateItemAsync<DbCompetition>(competition, new PartitionKey(competition.Name));
+        }
+        catch (Exception ex)
+        {
+            Logger.Instance.Log("Create competition failed: " + ex.ToString());
+            return false;
+        }
+        return true;
+    }
+
+
+    public async override Task<DbCompetition> ReadCompetition(string name)
+    {
+        var container = await GetContainer(DbCompetition.ContainerName);
+        ItemResponse<DbCompetition> response = null;
+        try
+        {
+            response = await container.ReadItemAsync<DbCompetition>(name, new PartitionKey(name));
+        }
+        catch (Exception ex)
+        {
+            Logger.Instance.Log("Get competition <" + name + "> failed: " + ex.ToString());
+            return null;
+        }
+        return response.Resource;
+    }
+    public async override Task<List<DbCompetition>> ReadAllCompetitions()
+    {
+        var container = await GetContainer(DbCompetition.ContainerName);
+        var queryDefinition = new QueryDefinition("SELECT * FROM Competitions");
+        var queryResultSetIterator = container.GetItemQueryIterator<DbCompetition>(queryDefinition);
+
+        List<DbCompetition> competitions = new List<DbCompetition>();
+        while (queryResultSetIterator.HasMoreResults)
+        {
+            var currentResultSet = await queryResultSetIterator.ReadNextAsync();
+            competitions.AddRange(currentResultSet);
+        }
+        return competitions;
+    }
+    public async override Task<bool> UpdateCompetition(DbCompetition competition)
+    {
+        var container = await GetContainer(DbCompetition.ContainerName);
+        try
+        {
+            await container.ReplaceItemAsync<DbCompetition>(competition, competition.Name, new PartitionKey(competition.Name));
+        }
+        catch (Exception ex)
+        {
+            Logger.Instance.Log("Update competitions failed: " + ex.ToString());
+            return false;
+        }
+        return true;
+    }
+    public async override Task<bool> DeleteCompetition(string name)
+    {
+        var container = await GetContainer(DbCompetition.ContainerName);
+        try
+        {
+            await container.DeleteItemAsync<DbCompetition>(name, new PartitionKey(name));
+        }
+        catch (Exception ex)
+        {
+            Logger.Instance.Log("Delete competition failed: " + ex.ToString());
+            return false;
+        }
+        return true;
+    }
+
     public async override Task<DbLogin> LoginUser(DbUser user)
     {
         user.Password = string.Empty;
         DbLogin login = new DbLogin() {Email= user.Email, Token= Guid.NewGuid() };
         
-        var container = await GetContainer(ContainerType.Logins);
+        var container = await GetContainer(DbLogin.ContainerName);
         try
         {
             await container.DeleteItemAsync<DbLogin>(login.Email, new PartitionKey(login.Email));
@@ -113,7 +188,7 @@ public class CosmosDatabase : DatabaseBase
         {
             try
             {
-                var container = await GetContainer(ContainerType.Logins);
+                var container = await GetContainer(DbLogin.ContainerName);
                 await container.DeleteItemAsync<DbLogin>(login.Email, new PartitionKey(login.Email));
             }
             catch (Exception ex) 
@@ -129,7 +204,7 @@ public class CosmosDatabase : DatabaseBase
     {
         try
         {
-            var container = await GetContainer(ContainerType.Logins);
+            var container = await GetContainer(DbLogin.ContainerName);
 
             string query = "SELECT * FROM Logins WHERE Logins.token='" + token + "'";
             Console.WriteLine(query);
@@ -176,14 +251,12 @@ public class CosmosDatabase : DatabaseBase
         return null;
     }
 
-    private async Task<Container> GetContainer(ContainerType containerType)
+    private async Task<Container> GetContainer(string container)
     {
         var primaryKey = Environment.GetEnvironmentVariable("PrimaryKey");
         var cosmosClient = new CosmosClient(Environment.GetEnvironmentVariable("EndpointUrl"), primaryKey);
         Database database = await cosmosClient.CreateDatabaseIfNotExistsAsync(Environment.GetEnvironmentVariable("DatabaseId"));
-        var container = (containerType == ContainerType.Users) ?
-                            await database.CreateContainerIfNotExistsAsync("Users", "/email") :
-                            await database.CreateContainerIfNotExistsAsync("Logins", "/email");
-        return container;
+        
+        return await database.CreateContainerIfNotExistsAsync(container, Settings.Instance.Containers[container]);
     }
 }

@@ -15,6 +15,12 @@ public abstract class DatabaseBase
     public abstract Task<bool> LogoutUser(DbLogin login);
     public abstract Task<DbUser> GetUserFromToken(string token);
 
+    public abstract Task<List<DbCompetition>> ReadAllCompetitions();
+    public abstract Task<bool> CreateCompetition(DbCompetition competition);
+    public abstract Task<DbCompetition> ReadCompetition(string name);
+    public abstract Task<bool> UpdateCompetition(DbCompetition competition);
+    public abstract Task<bool> DeleteCompetition(string name);
+
     internal static DatabaseBase GetDatabase<T>()
     {
         return (DatabaseBase)Activator.CreateInstance(typeof(T));
