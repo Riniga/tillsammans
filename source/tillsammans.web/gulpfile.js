@@ -1,66 +1,89 @@
-var argv = require('yargs').argv;
-var isProduction = (argv.production === undefined) ? false : true;
+import gulp from 'gulp';
+import clean from 'gulp-clean';
+import pug from 'gulp-pug';
+import yargs from 'yargs'
+import { hideBin } from 'yargs/helpers'
+import fs from 'node:fs';
+import { statSync } from 'node:fs'
+import path from 'path'
+import concat from 'gulp-concat'
+import uglify from 'gulp-uglify'
+import merge from 'merge-stream'
+import changed from 'gulp-changed'
+import autoprefixer from 'gulp-autoprefixer'
+import rename from 'gulp-rename'
+import csso from 'gulp-csso'
 
-console.log(isProduction);
+const argv = yargs(hideBin(process.argv))
+  .option('environment', {
+    alias: 'e',
+    type: 'string',
+    description: 'What environment to build for [production || test]',
+    demandOption: false
+  }).argv;
+  console.log(`Environment: ${argv.environment}`);
 
-const {
-  src,
-  dest,
-  parallel,
-  series,
-  watch
-} = require('gulp');
-
-const fs = require('fs');
-const path = require('path');
-const merge = require('merge-stream');
-const uglify = require('gulp-uglify');
-const rename = require('gulp-rename');
-const sass = require('gulp-sass');
-const autoprefixer = require('gulp-autoprefixer');
-const cssnano = require('gulp-cssnano');
-const concat = require('gulp-concat');
-const clean = require('gulp-clean');
-//const imagemin = require('gulp-imagemin');
-const changed = require('gulp-changed');
-const pug = require('gulp-pug');
-
-function clear() {
-  return src('./public/*', {read: false})
-      .pipe(clean());
+function tryStatSync(filePath) {  
+  try {
+    return statSync(filePath)
+  } catch(e) {
+    return undefined // instead of `new Stats()` here
+  }
 }
 
 function getFolders(dir) 
 {
-  return fs.readdirSync(dir).filter(function(file) 
-  {
-      return fs.statSync(path.join(dir, file)).isDirectory();
-  });
+  try {
+    var folders = []
+    const files = fs.readdirSync(dir);
+
+    files.forEach(file => {
+      const filePath = path.join(dir, file);
+      const stats = tryStatSync(filePath)
+      if (stats && stats.isDirectory()) { 
+        folders.push(file)
+      }
+      
+    });
+    return folders
+  } catch (err) {
+    console.error('Error:', err);
+  }
+  
 }
 
-function js() 
+gulp.task('clean', function () {
+  return gulp.src('./public', { read: false, allowEmpty: true })
+      .pipe(clean());
+});
+
+
+gulp.task('pug', function () {
+  return gulp.src('./source/pug/pages/**/*.pug')
+      .pipe(pug({ pretty: true }))
+      .pipe(gulp.dest('./public'));
+});
+
+gulp.task('scripts', function () 
 {
-
-  if (isProduction) config = src('./source/javascripts/config/production.js').pipe(concat('config.js')).pipe(dest('./public/javascripts/'));
-  else config = src('./source/javascripts/config/development.js').pipe(concat('config.js')).pipe(dest('./public/javascripts/'));
-
   var folders= getFolders("./source/javascripts")
   folders = folders.filter(function (folder) { return folder !== 'config'; });
-
   var tasks = folders.map(function(folder) 
   {
     const source = ['./source/javascripts/'+folder+'/*.js'];
-    var stream = src(source).pipe(concat(folder+'.js'))
-    if (isProduction) stream=stream.pipe(uglify()); 
-    return stream.pipe(dest('./public/javascripts/'));
+    var stream = gulp.src(source).pipe(concat(folder + '.js'))
+    if (argv.environment=='production') stream=stream.pipe(uglify()); 
+    return stream.pipe(gulp.dest('./public/javascripts/'));
   });
-  return merge(config, tasks);
-}
 
-function css() {
+  if (argv.environment=='production') tasks.push(gulp.src('./source/javascripts/config/production.js').pipe(concat('config.js')).pipe(gulp.dest('./public/javascripts/')));
+  else tasks.push(gulp.src('./source/javascripts/config/development.js').pipe(concat('config.js')).pipe(gulp.dest('./public/javascripts/')));
+  return merge(tasks);
+});
+
+gulp.task('styles', function () {
   const source = './source/stylesheets/*.css';
-
-  return src(source)
+  return gulp.src(source)
       .pipe(changed(source))
       .pipe(autoprefixer({
           overrideBrowserslist: ['last 2 versions'],
@@ -69,36 +92,23 @@ function css() {
       .pipe(rename({
           extname: '.min.css'
       }))
-      .pipe(cssnano())
-      .pipe(dest('./public/stylesheets/'))
-}
+      .pipe(csso())
+      .pipe(gulp.dest('./public/stylesheets/'))
+    });
 
-function html() {
-  return src('./source/pug/pages/**/*.pug')
-  .pipe(pug({pretty: true}))
-  .pipe(dest('./public'));
-}
 
-function img() {
-  return src('./source/images/**/*.*')
-      //.pipe(imagemin())
-      .pipe(dest('./public/images'));
-}
+gulp.task('images', function () {
+  return gulp.src('./source/images/**/*.*',  { encoding: false })
+      .pipe(gulp.dest('./public/images'));
+});
 
-function watchFiles() {
-  watch('./source/stylesheets/**/*.*', css);
-  watch('./source/javascripts/**/*.*', js);
-  watch('./source/images/**/*.*', img);
-  watch('./source/pug/**/*.*', html);
-}
+gulp.task('watch', function () {
+  gulp.watch('source/pug/**/*.pug', gulp.series('pug'));
+  gulp.watch('source/stylesheets/**/*.css', gulp.series('styles'));
+  gulp.watch('source/javascripts/**/*.js', gulp.series('scripts'));
+  gulp.watch('source/images/**/*.*', gulp.series('images'));
+});
 
-// Tasks to define the execution of the functions simultaneously or in series
-
-exports.clean = clear;
-exports.js = js;
-exports.css = css;
-exports.html = html;
-exports.img = img;
-
-exports.watch = watchFiles;
-exports.default = series(clear, parallel(html, js, css, img));
+gulp.task('default', gulp.series('clean', 'pug','scripts','styles','images', function (done) {
+  done();
+}));
