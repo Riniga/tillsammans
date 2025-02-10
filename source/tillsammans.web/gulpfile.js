@@ -12,7 +12,7 @@ import merge from 'merge-stream'
 import changed from 'gulp-changed'
 import autoprefixer from 'gulp-autoprefixer'
 import rename from 'gulp-rename'
-import cssnano from 'gulp-cssnano'
+import csso from 'gulp-csso'
 
 const argv = yargs(hideBin(process.argv))
   .option('environment', {
@@ -92,7 +92,7 @@ gulp.task('styles', function () {
       .pipe(rename({
           extname: '.min.css'
       }))
-      .pipe(cssnano())
+      .pipe(csso())
       .pipe(gulp.dest('./public/stylesheets/'))
     });
 
