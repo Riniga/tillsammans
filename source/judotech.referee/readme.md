@@ -13,8 +13,9 @@ Använd long-term support (LTS) är versionr med jämnt nummer, just nu 22.13.0 
 - Installera: npm install
 
 
-# Uppgradering
-
+# Upgrading
+npm outdated
+npm update --save
 
 # Prepare and Watch (in terminal 1)
 - cd source\judotech.web 
