@@ -12,7 +12,6 @@
   "license": "GNU GENERAL PUBLIC LICENSE",
   "type": "module",
   "devDependencies": {
-    "express": "^4.21.1",
     "fs": "^0.0.1-security",
     "gulp": "^5.0.0",
     "gulp-autoprefixer": "^9.0.0",

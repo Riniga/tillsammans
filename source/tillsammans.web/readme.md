@@ -15,10 +15,19 @@ Använd long-term support (LTS) är versionr med jämnt nummer, just nu 22.13.0 
 
 # Uppgradering
 
-# Starta Webserver  
-  - gulp
-  - gulp watch
-  - npm run start
+
+# Prepare and Watch (in terminal 1)
+- cd source\tillsammans.web 
+- npm install
+- gulp --environment <production | test | uat | development>
+- gulp watch
+
+# Starta Webserver (in terminal 2) 
+- cd source\tillsammans.web 
+- start live-server --port=4145 public
+
+
+
 
 # Dependabot
 Om dependabot klagar så här fixade jag det sist....

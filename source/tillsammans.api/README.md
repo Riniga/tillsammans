@@ -6,17 +6,15 @@ func init tillsammans.api --dotnet
 func installeras med: npm i -g azure-functions-core-tools@3 --unsafe-perm true
 conda install 
 
+## CosmosDB
+- Se ..\readme.md för att sätta upp cosmos db i azure och hämta nycklar
+
 ## Skapa local.settings.json
-Kopiera local.settings_sample.json till local.settings.json och uppdatera fälten
+- Kopiera local.settings_sample.json till local.settings.json och uppdatera fälten
 
 ## Utvecklingsmiljöer (för test och utveckling)
-starta med: func start --csharp
-Debug genom att "Attach to process" -> välj func bland processer
-
-## CosmosDB
-För att emulera CosmosDB behvös Azure Cosmos DB Emulator https://aka.ms/cosmosdb-emulator 
-Starta Cosmos DB Emulator
-Databasen (CosmosDatabase) måste skapas: https://localhost:8081/_explorer/index.html
+- starta med: func start --csharp
+- Debug genom att "Attach to process" -> välj func bland processer
 
 ## Anrop mot API
 Testa API med hjälp av applikationen https://www.postman.com/

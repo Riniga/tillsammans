@@ -1,19 +1,7 @@
 import gulp from 'gulp';
-import clean from 'gulp-clean';
-import pug from 'gulp-pug';
+
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
-import fs from 'node:fs';
-import { statSync } from 'node:fs'
-import path from 'path'
-import concat from 'gulp-concat'
-import uglify from 'gulp-uglify'
-import merge from 'merge-stream'
-import changed from 'gulp-changed'
-import autoprefixer from 'gulp-autoprefixer'
-import rename from 'gulp-rename'
-import csso from 'gulp-csso'
-
 const argv = yargs(hideBin(process.argv))
   .option('environment', {
     alias: 'e',
@@ -23,64 +11,48 @@ const argv = yargs(hideBin(process.argv))
   }).argv;
   console.log(`Environment: ${argv.environment}`);
 
-function tryStatSync(filePath) {  
-  try {
-    return statSync(filePath)
-  } catch(e) {
-    return undefined // instead of `new Stats()` here
-  }
-}
 
-function getFolders(dir) 
-{
-  try {
-    var folders = []
-    const files = fs.readdirSync(dir);
-
-    files.forEach(file => {
-      const filePath = path.join(dir, file);
-      const stats = tryStatSync(filePath)
-      if (stats && stats.isDirectory()) { 
-        folders.push(file)
-      }
-      
-    });
-    return folders
-  } catch (err) {
-    console.error('Error:', err);
-  }
-  
-}
-
+import clean from 'gulp-clean';
 gulp.task('clean', function () {
   return gulp.src('./public', { read: false, allowEmpty: true })
       .pipe(clean());
 });
 
-
+import pug from 'gulp-pug';
 gulp.task('pug', function () {
   return gulp.src('./source/pug/pages/**/*.pug')
       .pipe(pug({ pretty: true }))
       .pipe(gulp.dest('./public'));
 });
 
+
+
+import fs from 'node:fs';
+import concat from 'gulp-concat'
+import uglify from 'gulp-uglify'
+import rename from 'gulp-rename'
 gulp.task('scripts', function () 
 {
-  var folders= getFolders("./source/javascripts")
-  folders = folders.filter(function (folder) { return folder !== 'config'; });
-  var tasks = folders.map(function(folder) 
-  {
-    const source = ['./source/javascripts/'+folder+'/*.js'];
-    var stream = gulp.src(source).pipe(concat(folder + '.js'))
-    if (argv.environment=='production') stream=stream.pipe(uglify()); 
-    return stream.pipe(gulp.dest('./public/javascripts/'));
-  });
+  const SOURCE_DIR = "source/javascripts/";
+  const OUTPUT_DIR = "public/javascripts/";
+  const folders = fs.readdirSync(SOURCE_DIR, { withFileTypes: true })
+    .filter(dirent => dirent.isDirectory() && dirent.name != "config") 
+    .map(dirent => dirent.name);
 
-  if (argv.environment=='production') tasks.push(gulp.src('./source/javascripts/config/production.js').pipe(concat('config.js')).pipe(gulp.dest('./public/javascripts/')));
-  else tasks.push(gulp.src('./source/javascripts/config/development.js').pipe(concat('config.js')).pipe(gulp.dest('./public/javascripts/')));
-  return merge(tasks);
+  const tasks = folders.map(folder => {
+      var stream = gulp.src(`${SOURCE_DIR}${folder}/*.js`) 
+          .pipe(concat(`${folder}.js`)) 
+          .pipe(rename({ extname: ".min.js" })) 
+        if (argv.environment=='production') stream = stream.pipe(uglify())
+      return stream.pipe(gulp.dest(OUTPUT_DIR));
+  });
+  tasks.push(gulp.src('./source/javascripts/config/'+argv.environment+'.js').pipe(concat('config.js')).pipe(gulp.dest('./public/javascripts/')));
+  return Promise.all(tasks);
 });
 
+import changed from 'gulp-changed'
+import autoprefixer from 'gulp-autoprefixer'
+import csso from 'gulp-csso'
 gulp.task('styles', function () {
   const source = './source/stylesheets/*.css';
   return gulp.src(source)
