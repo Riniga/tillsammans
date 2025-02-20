@@ -1,2 +1,2 @@
-cd ./source/tillsammans.api
-dotnet build tillsammans_api.csproj
+cd ./source/judotech.api
+dotnet build judotech_api.csproj

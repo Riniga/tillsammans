@@ -12,9 +12,9 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Build static site tillsammans.web
+    - name: Build static site judotech.web
       run: |
-        cd ./source/tillsammans.web
+        cd ./source/judotech.web
         npm install
         gulp --production
         
@@ -25,8 +25,8 @@ jobs:
       uses: azure/CLI@v1
       with:
         inlineScript: |
-          az storage blob delete-batch --account-name storagetillsammans --auth-mode key -s '$web'
-          az storage blob upload-batch --account-name storagetillsammans --auth-mode key -s ./source/tillsammans.web/public -d '$web' 
+          az storage blob delete-batch --account-name storagejudotech --auth-mode key -s '$web'
+          az storage blob upload-batch --account-name storagejudotech --auth-mode key -s ./source/judotech.web/public -d '$web' 
     #- name: Purge CDN endpoint
     #  uses: azure/CLI@v1
     #  with:

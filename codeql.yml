@@ -61,7 +61,7 @@ jobs:
         dotnet-version: 3.1.301
         
     - name: Install dependencies
-      run: dotnet restore ./source/tillsammans.sln
+      run: dotnet restore ./source/judotech.sln
 
     # Autobuild attempts to build any compiled languages  (C/C++, C#, Go, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
