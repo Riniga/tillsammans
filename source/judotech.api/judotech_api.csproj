@@ -6,7 +6,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="6.0.8" />
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.13" />
-    <ProjectReference Include="..\judotech.library\judotech.csproj" />
+    <ProjectReference Include="..\judotech.core\judotech_core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">
